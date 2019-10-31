@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import clsx from "clsx";
 import images from "../helpers/Images";
 import Flickity from "react-flickity-component";
 import { makeStyles } from "@material-ui/core/styles";
 import "../Media/flickity.min.css";
-
 import {
   Avatar,
   Box,

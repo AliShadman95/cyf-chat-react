@@ -1,9 +1,24 @@
 import React from "react";
 import { List, Box } from "@material-ui/core";
 import Room from "./Room";
-import { withRouter } from "react-router";
+import ScrollToBottom from "react-scroll-to-bottom";
+import { makeStyles } from "@material-ui/core/styles";
 
-const Rooms = ({ rooms, changeRoom, history }) => {
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: "#404346",
+    color: "white",
+    overflow: "auto",
+    height: "100%"
+  },
+  room: {
+    backgroundColor: "#404346"
+  },
+  messageBox: { alignItems: "flex-end" }
+});
+
+const Rooms = ({ rooms, currentRoom, changeRoom, users }) => {
+  const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleListItemClick = (event, index) => {
@@ -16,20 +31,24 @@ const Rooms = ({ rooms, changeRoom, history }) => {
     setSelectedIndex(index);
   };
   return (
-    <List>
-      {rooms.map((room, i) => {
-        return (
-          <Box key={i}>
-            <Room
-              roomName={room}
-              index={i}
-              selectedIndex={selectedIndex}
-              handleListItemClick={handleListItemClick}
-            />
-          </Box>
-        );
-      })}
-    </List>
+    <ScrollToBottom className={classes.root}>
+      <List className={classes.room}>
+        {rooms.map((room, i) => {
+          return (
+            <Box key={i}>
+              <Room
+                roomName={room}
+                currentRoom={currentRoom}
+                index={i}
+                users={users}
+                selectedIndex={selectedIndex}
+                handleListItemClick={handleListItemClick}
+              />
+            </Box>
+          );
+        })}
+      </List>
+    </ScrollToBottom>
   );
 };
 
