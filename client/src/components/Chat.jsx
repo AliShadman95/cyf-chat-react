@@ -84,7 +84,7 @@ const Chat = ({ location }) => {
 
   const prevRoom = usePrevious(room);
 
-  const ENDPOINT = "localhost:3005";
+  const ENDPOINT = "https://chat-by-as.herokuapp.com/";
   const ROOMS = ["Main", "Chill", "Evening", "Room1", "Room2", "Room3"];
 
   useEffect(() => {
