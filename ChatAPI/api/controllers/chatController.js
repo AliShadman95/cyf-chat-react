@@ -27,6 +27,18 @@ exports.get_a_message_by_id = (req, res) => {
   });
 };
 
+exports.search_messages_by_text = (req, res) => {
+  Message.find(
+    { message: { $regex: req.params.searchValue, $options: "i" } },
+    function(err, message) {
+      if (err) {
+        return res.send(err);
+      }
+      res.json(message);
+    }
+  );
+};
+
 exports.get_messages_by_room = (req, res) => {
   Message.find({ room: req.params.roomName }, function(err, message) {
     if (err) {
@@ -64,6 +76,33 @@ exports.delete_a_message = (req, res) => {
       if (message.deletedCount > 0)
         res.json({ message: "Message successfully deleted" });
       else res.json({ message: "Message to delete not found" });
+    }
+  );
+};
+
+exports.get_latest_by_room = (req, res) => {
+  Message.find({ room: req.params.roomName }, function(err, message) {
+    if (err) {
+      return res.send(err);
+    }
+    res.json(message);
+  })
+    .sort({ _id: -1 })
+    .limit(10);
+};
+
+exports.search_messages_by_room = (req, res) => {
+  Message.find(
+    {
+      message: { $regex: req.params.searchValue, $options: "i" },
+      room: req.params.roomName
+    },
+    function(err, message) {
+      if (err) {
+        return res.send(err);
+      }
+
+      res.json(message);
     }
   );
 };

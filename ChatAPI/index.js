@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 var socketio = require("socket.io");
 var http = require("http");
@@ -20,8 +22,10 @@ const {
   getUsersInRoom
 } = require("./users.js");
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@chat-hbleq.mongodb.net/Chat?retryWrites=true&w=majority`;
+
 // mongoose instance connection url connection
-mongoose.connect("mongodb://localhost/Chat", {
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
@@ -56,12 +60,16 @@ io.on("connection", socket => {
     //For everyone
     socket.emit("message", {
       name: "Admin",
-      message: `${user.name}, Welcome to room ${user.room}`
+      message: `${user.name}, Welcome!`,
+      room: user.room
     });
     //For all beside the sender client
-    socket.broadcast
-      .to(user.room)
-      .emit("message", { name: "Admin", message: `${user.name} has joined!` });
+    socket.broadcast.to(user.room).emit("message", {
+      name: "Admin",
+
+      message: `${user.name} has joined!`,
+      room: user.room
+    });
 
     io.to(user.room).emit("roomData", {
       room: user.room,
@@ -88,28 +96,48 @@ io.on("connection", socket => {
     const user = updateUserRoom(socket.id, room);
     console.log("user", user);
 
-    socket.leave(user.prevRoom);
     socket.join(user.room);
+    socket.leave(user.prevRoom);
 
-    //For everyone
-    socket.emit("message", {
-      name: "Admin",
-      message: `${user.name}, Welcome to room ${user.room}`
-    });
     //For all beside the sender client
     socket.broadcast.to(user.room).emit("message", {
       name: "Admin",
-      message: `${user.name} has joined!`
+      message: `${user.name} has joined!`,
+      room: user.room
     });
 
     socket.broadcast.to(user.prevRoom).emit("message", {
       name: "Admin",
-      message: `${user.name} has left.`
+      message: `${user.name} has left.`,
+      room: user.room
     });
 
     io.to(user.room).emit("roomData", {
       room: user.room,
       users: getUsersInRoom(user.room)
+    });
+
+    socket.to(user.prevRoom).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.prevRoom)
+    });
+
+    callback();
+  });
+
+  socket.on("SEND_IS_TYPING", ({ room, name }, callback) => {
+    socket.broadcast.to(room).emit("IS_TYPING", {
+      name: name,
+      message: "is typing.."
+    });
+
+    callback();
+  });
+
+  socket.on("SEND_IS_NOT_TYPING", ({ room, name }, callback) => {
+    socket.broadcast.to(room).emit("IS_NOT_TYPING", {
+      name: name,
+      message: " is typing.."
     });
 
     callback();
@@ -121,7 +149,8 @@ io.on("connection", socket => {
     if (user) {
       io.to(user.room).emit("message", {
         name: "Admin",
-        message: `${user.name} has left.`
+        message: `${user.name} has left.`,
+        room: user.room
       });
       io.to(user.room).emit("roomData", {
         room: user.room,

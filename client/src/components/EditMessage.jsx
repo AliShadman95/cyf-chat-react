@@ -1,59 +1,110 @@
 import React, { useState } from "react";
 import {
-  Avatar,
   Box,
-  ListItem,
-  List,
-  ListItemAvatar,
   ListItemText,
   IconButton,
   Typography,
-  Collapse
+  Menu,
+  MenuItem,
+  ListItemIcon
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { mdiMenu } from "@mdi/js";
 import Icon from "@mdi/react";
+import EditIcon from "@material-ui/icons/Edit";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    })
-  },
-  expandOpen: {
-    transform: "rotate(180deg)"
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5"
   }
-}));
+})(props => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "left"
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "left"
+    }}
+    {...props}
+  />
+));
 
-const EditMessage = () => {
-  const classes = useStyles();
+const StyledMenuItem = withStyles(theme => ({
+  root: {
+    "&:hover": {
+      backgroundColor: theme.palette.grey,
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: theme.palette.common.white
+      }
+    }
+  }
+}))(MenuItem);
+
+const EditMessage = ({ onDelete, onEdit, id, thereIsId }) => {
   const [expanded, setExpanded] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   return (
     <Box>
-      <IconButton
-        className={clsx(classes.expand, {
-          [classes.expandOpen]: expanded
-        })}
-        onClick={handleExpandClick}
-        aria-expanded={expanded}
-        aria-label="show more"
-      >
+      <IconButton onClick={handleClick}>
         <Icon path={mdiMenu} title="Menu" size={1} color="white" />
       </IconButton>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <List>
-          <ListItem button>Edit message</ListItem>
-          <ListItem button>Delete message</ListItem>
-        </List>
-      </Collapse>
+      <StyledMenu
+        id="customized-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <StyledMenuItem
+          onClick={e => {
+            e.preventDefault();
+            onDelete(id);
+          }}
+        >
+          <ListItemIcon>
+            <DeleteIcon color="secondary" />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <Typography component="span" className="pl-3" variant="body2">
+                Delete
+              </Typography>
+            }
+          />
+        </StyledMenuItem>
+        <StyledMenuItem
+          onClick={e => {
+            e.preventDefault();
+            onEdit(id);
+          }}
+        >
+          <ListItemIcon>
+            <EditIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <Typography component="span" className="pl-3" variant="body2">
+                Edit
+              </Typography>
+            }
+          />
+        </StyledMenuItem>
+      </StyledMenu>
     </Box>
   );
 };
