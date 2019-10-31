@@ -170,7 +170,10 @@ const Chat = ({ location }) => {
       });
 
       let mess = { name, avatar, message, room };
-      const response = await axios.post(`http://localhost:3005/messages`, mess);
+      const response = await axios.post(
+        `https://chat-by-as.herokuapp.com/messages`,
+        mess
+      );
     }
     fetchMessages(room);
   };
@@ -189,7 +192,7 @@ const Chat = ({ location }) => {
     const str = type === 0 ? `${value}` : `room/${room}/${value}`;
 
     const response = await axios.get(
-      `http://localhost:3005/messages/search/${str}`
+      `https://chat-by-as.herokuapp.com/messages/search/${str}`
     );
 
     setSearchMessagesResult(response.data);
@@ -197,14 +200,14 @@ const Chat = ({ location }) => {
 
   const fetchMessages = async room => {
     const response = await axios.get(
-      `http://localhost:3005/messages/rooms/${room}`
+      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
     );
     setMessages(response.data.length >= 1 ? response.data : []);
   };
 
   const deleteMessage = async id => {
     const response = await axios.delete(
-      `http://localhost:3005/messages/id/${id}`
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`
     );
 
     //Create copy of messages and filter out the deleted message
@@ -214,7 +217,7 @@ const Chat = ({ location }) => {
 
   const editMessage = async (id, message) => {
     const response = await axios.put(
-      `http://localhost:3005/messages/id/${id}`,
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
       {
         message
       }
@@ -231,7 +234,7 @@ const Chat = ({ location }) => {
 
   const getLatestMessages = async () => {
     const response = await axios.get(
-      `http://localhost:3005/messages/latest/${room}`
+      `https://chat-by-as.herokuapp.com/messages/latest/${room}`
     );
 
     setMessages(response.data.reverse());
