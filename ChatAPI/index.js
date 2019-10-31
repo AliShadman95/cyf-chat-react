@@ -25,7 +25,7 @@ const {
 
 
 // mongoose instance connection url connection
-mongoose.connect(process.env.MONGODB_URL, {
+mongoose.connect(process.env.MONGOLAB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
