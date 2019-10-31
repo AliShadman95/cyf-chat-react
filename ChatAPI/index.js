@@ -22,10 +22,10 @@ const {
   getUsersInRoom
 } = require("./users.js");
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@chat-hbleq.mongodb.net/Chat?retryWrites=true&w=majority`;
+
 
 // mongoose instance connection url connection
-mongoose.connect(uri, {
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
