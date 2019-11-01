@@ -84,8 +84,11 @@ const Chat = ({ location }) => {
 
   const prevRoom = usePrevious(room);
 
-  const ENDPOINT =
-    "https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/";
+  const options = {
+    "Access-Control-Allow-Origin": "https://letschaaat.netlify.com/"
+  };
+
+  const ENDPOINT = "https://chat-by-as.herokuapp.com/";
   const ROOMS = ["Main", "Chill", "Evening", "Room1", "Room2", "Room3"];
 
   useEffect(() => {
@@ -193,7 +196,8 @@ const Chat = ({ location }) => {
     const str = type === 0 ? `${value}` : `room/${room}/${value}`;
 
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/search/${str}`
+      `https://chat-by-as.herokuapp.com/messages/search/${str}`,
+      options
     );
 
     setSearchMessagesResult(response.data);
@@ -201,14 +205,16 @@ const Chat = ({ location }) => {
 
   const fetchMessages = async room => {
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
+      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`,
+      options
     );
     setMessages(response.data.length >= 1 ? response.data : []);
   };
 
   const deleteMessage = async id => {
     const response = await axios.delete(
-      `https://chat-by-as.herokuapp.com/messages/id/${id}`
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
+      options
     );
 
     //Create copy of messages and filter out the deleted message
@@ -221,7 +227,8 @@ const Chat = ({ location }) => {
       `https://chat-by-as.herokuapp.com/messages/id/${id}`,
       {
         message
-      }
+      },
+      options
     );
 
     //Create copy of messages and edit the state
@@ -235,7 +242,8 @@ const Chat = ({ location }) => {
 
   const getLatestMessages = async () => {
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/latest/${room}`
+      `https://chat-by-as.herokuapp.com/messages/latest/${room}`,
+      options
     );
 
     setMessages(response.data.reverse());
