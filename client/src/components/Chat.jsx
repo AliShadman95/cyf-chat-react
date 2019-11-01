@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
       paddingRight: "0px"
     },
     [theme.breakpoints.only("lg")]: {
-      height: "73vh",
+      height: "75vh",
       paddingRight: "0px"
     }
   },
@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
       paddingRight: "0px"
     },
     [theme.breakpoints.only("lg")]: {
-      height: "73vh",
+      height: "75vh",
       paddingRight: "0px"
     }
   }
@@ -178,7 +178,8 @@ const Chat = ({ location }) => {
       let mess = { name, avatar, message, room };
       const response = await axios.post(
         `https://chat-by-as.herokuapp.com/messages`,
-        mess
+        mess,
+        options
       );
     }
     fetchMessages(room);
@@ -298,6 +299,7 @@ const Chat = ({ location }) => {
             <Box className="mt-4">
               <Box className={classes.chipsXS}>
                 <Chip
+                  style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
                   avatar={
                     <Icon
                       path={mdiReload}
@@ -322,6 +324,7 @@ const Chat = ({ location }) => {
                   variant="outlined"
                 />
                 <Chip
+                  style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
                   avatar={
                     <Icon
                       path={mdiReload}
@@ -361,7 +364,7 @@ const Chat = ({ location }) => {
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className="row mt-2">
                 <div className="col-md-12 col-xs-12">
                   <Form
                     onInputChange={handleInputChange}
@@ -373,8 +376,17 @@ const Chat = ({ location }) => {
                 </div>
               </div>
               <div className="row">
-                <div className="col-md-12 col-xs-12 text-left">
+                <div className="col-md-6 col-xs-6 text-left">
                   <IsTyping userTyping={userTyping} />
+                </div>
+                <div className="col-md-6 col-xs-6 text-right pt-2">
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    style={{ color: "white" }}
+                  >
+                    Made with ❤ by Ali Shadman
+                  </Typography>
                 </div>
               </div>
             </div>
