@@ -85,7 +85,9 @@ const Chat = ({ location }) => {
   const prevRoom = usePrevious(room);
 
   const options = {
-    "Access-Control-Allow-Origin": "https://letschaaat.netlify.com/"
+    headers: {
+      "Access-Control-Allow-Origin": "https://letschaaat.netlify.com/"
+    }
   };
 
   const ENDPOINT = "https://chat-by-as.herokuapp.com/";
