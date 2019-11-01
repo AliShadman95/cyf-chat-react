@@ -170,7 +170,10 @@ const Chat = ({ location }) => {
       });
 
       let mess = { name, avatar, message, room };
-      const response = await axios.post(`/messages`, mess);
+      const response = await axios.post(
+        `https://chat-by-as.herokuapp.com/messages`,
+        mess
+      );
     }
     fetchMessages(room);
   };
@@ -188,18 +191,24 @@ const Chat = ({ location }) => {
   const searchMessages = async (value, type) => {
     const str = type === 0 ? `${value}` : `room/${room}/${value}`;
 
-    const response = await axios.get(`/messages/search/${str}`);
+    const response = await axios.get(
+      `https://chat-by-as.herokuapp.com/messages/search/${str}`
+    );
 
     setSearchMessagesResult(response.data);
   };
 
   const fetchMessages = async room => {
-    const response = await axios.get(`/messages/rooms/${room}`);
+    const response = await axios.get(
+      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
+    );
     setMessages(response.data.length >= 1 ? response.data : []);
   };
 
   const deleteMessage = async id => {
-    const response = await axios.delete(`/messages/id/${id}`);
+    const response = await axios.delete(
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`
+    );
 
     //Create copy of messages and filter out the deleted message
     let copyMess = [...messages];
@@ -207,9 +216,12 @@ const Chat = ({ location }) => {
   };
 
   const editMessage = async (id, message) => {
-    const response = await axios.put(`/messages/id/${id}`, {
-      message
-    });
+    const response = await axios.put(
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
+      {
+        message
+      }
+    );
 
     //Create copy of messages and edit the state
     let copyMess = [...messages];
@@ -221,7 +233,9 @@ const Chat = ({ location }) => {
   };
 
   const getLatestMessages = async () => {
-    const response = await axios.get(`/messages/latest/${room}`);
+    const response = await axios.get(
+      `https://chat-by-as.herokuapp.com/messages/latest/${room}`
+    );
 
     setMessages(response.data.reverse());
   };
