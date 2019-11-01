@@ -32,7 +32,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({origin: true}));
+app.use(cors());
 var routes = require("./api/routes/chatRoutes"); //importing routes
 routes(app); //register the routes
 
