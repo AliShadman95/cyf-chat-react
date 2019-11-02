@@ -11,6 +11,7 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const io = socketio(server);
 
@@ -22,8 +23,6 @@ const {
   getUsersInRoom
 } = require("./users.js");
 
-
-
 // mongoose instance connection url connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -32,7 +31,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+
 var routes = require("./api/routes/chatRoutes"); //importing routes
 routes(app); //register the routes
 
