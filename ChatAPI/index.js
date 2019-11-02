@@ -7,7 +7,7 @@ const app = express();
 app.use(
   express.static("public", {
     setHeaders: function setHeaders(res, path, stat) {
-      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Origin", "https://letschaaat.netlify.com");
       res.set("Access-Control-Allow-Methods", "GET,POST,UPDATE");
       res.set("Access-Control-Allow-Headers", "Content-Type");
     }
