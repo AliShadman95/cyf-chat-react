@@ -13,7 +13,7 @@ var Task = require("./api/models/chatModel"); //created model loading here
 var bodyParser = require("body-parser");
 
 const server = http.createServer(app);
-const io = socketio(app, {
+const io = socketio(server, {
   handlePreflightRequest: (req, res) => {
     const headers = {
       "Access-Control-Allow-Headers": "Content-Type",
@@ -168,6 +168,6 @@ io.on("connection", socket => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("listening on *:3005");
 });
