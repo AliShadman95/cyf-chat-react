@@ -1,6 +1,8 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
+const app = express();
+app.use(cors());
 var socketio = require("socket.io");
 var http = require("http");
 const PORT = process.env.PORT || 3005;
@@ -10,8 +12,6 @@ var Task = require("./api/models/chatModel"); //created model loading here
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
-const app = express();
-app.use(cors());
 const server = http.createServer(app);
 const io = socketio(server, {
   handlePreflightRequest: (req, res) => {
