@@ -12,7 +12,7 @@ var cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server, { origins: "*:*" });
+const io = socketio(server, { origins: "https://letschaaat.netlify.com/" });
 
 const {
   addUser,
