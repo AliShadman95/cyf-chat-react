@@ -8,8 +8,8 @@ app.use(
   express.static("public", {
     setHeaders: function setHeaders(res, path, stat) {
       res.set("Access-Control-Allow-Origin", "https://letschaaat.netlify.com");
-      res.set("Access-Control-Allow-Methods", "GET,POST,UPDATE");
-      res.set("Access-Control-Allow-Headers", "Content-Type");
+      res.set("Access-Control-Allow-Methods", "OPTIONS,GET,PUT,POST,DELETE");
+      res.set("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     }
   })
 );
@@ -21,7 +21,7 @@ const mongoose = require("mongoose");
 var Task = require("./api/models/chatModel"); //created model loading here
 var bodyParser = require("body-parser");
 
-const server = http.createServer(app);
+const server = http.createServer({headers:},app);
 const io = socketio(server, {
   handlePreflightRequest: (req, res) => {
     const headers = {
