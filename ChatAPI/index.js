@@ -3,7 +3,7 @@ dotenv.config();
 var cors = require("cors");
 const express = require("express");
 const app = express();
-var whitelist = ["http://example1.com", "http://example2.com"];
+var whitelist = ["http://localhost:3000", "https://letschaaat.netlify.com"];
 var corsOptions = {
   origin: function(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
