@@ -13,7 +13,11 @@ var cors = require("cors");
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
-const io = socketio(server, { origins: "https://letschaaat.netlify.com/:*" });
+const domains = [
+  "https://letschaaat.netlify.com/:*",
+  "https://letschaaat.netlify.com/chat/:*"
+];
+const io = socketio(server, { origins: domains });
 
 const {
   addUser,
