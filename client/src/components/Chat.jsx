@@ -171,7 +171,7 @@ const Chat = ({ location }) => {
 
       let mess = { name, avatar, message, room };
       const response = await axios.post(
-        `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages`,
+        `https://chat-by-as.herokuapp.com/messages`,
         mess
       );
     }
@@ -192,7 +192,7 @@ const Chat = ({ location }) => {
     const str = type === 0 ? `${value}` : `room/${room}/${value}`;
 
     const response = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/search/${str}`
+      `https://chat-by-as.herokuapp.com/messages/search/${str}`
     );
 
     setSearchMessagesResult(response.data);
@@ -200,14 +200,14 @@ const Chat = ({ location }) => {
 
   const fetchMessages = async room => {
     const response = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/rooms/${room}`
+      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
     );
     setMessages(response.data.length >= 1 ? response.data : []);
   };
 
   const deleteMessage = async id => {
     const response = await axios.delete(
-      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/id/${id}`
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`
     );
 
     //Create copy of messages and filter out the deleted message
@@ -217,7 +217,7 @@ const Chat = ({ location }) => {
 
   const editMessage = async (id, message) => {
     const response = await axios.put(
-      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/id/${id}`,
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
       {
         message
       }
@@ -234,7 +234,7 @@ const Chat = ({ location }) => {
 
   const getLatestMessages = async () => {
     const response = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/latest/${room}`
+      `https://chat-by-as.herokuapp.com/messages/latest/${room}`
     );
 
     setMessages(response.data.reverse());
