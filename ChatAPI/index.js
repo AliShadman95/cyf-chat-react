@@ -3,15 +3,10 @@ dotenv.config();
 var cors = require("cors");
 const express = require("express");
 const app = express();
-var whitelist = ["http://localhost:3000", "https://letschaaat.netlify.com"];
+
 var corsOptions = {
-  origin: function(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  }
+  origin: "https://letschaaat.netlify.com",
+  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 var socketio = require("socket.io");
