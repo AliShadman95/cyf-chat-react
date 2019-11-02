@@ -151,8 +151,14 @@ const Chat = ({ location }) => {
     socket.on("IS_TYPING", ({ name }) => {
       //Concat the name of the user that is typing to " is typing..."
       const userTyp = userTyping;
-      const string = name.concat(userTyp);
-      setUserTyping(string);
+      if (userTyp !== " is typing..") {
+        const reg = userTyp.match(/\S+/g);
+        const string = name.concat(` and ${reg[0]} are typing... `);
+        setUserTyping(string);
+      } else {
+        const string = name.concat(userTyp);
+        setUserTyping(string);
+      }
     });
 
     socket.on("IS_NOT_TYPING", ({ message }) => {
@@ -241,7 +247,8 @@ const Chat = ({ location }) => {
   };
 
   const typingstopped = () => {
-    setIsTyping(false);
+    console.log("called");
+    if (isTyping !== false) setIsTyping(false);
     socket.emit("SEND_IS_NOT_TYPING", { room, name }, error => {
       console.log(error);
     });
@@ -252,6 +259,7 @@ const Chat = ({ location }) => {
     let time;
     if (isTyping === false) {
       setIsTyping(true);
+      console.log("sending ");
       socket.emit("SEND_IS_TYPING", { room, name }, error => {
         console.log(error);
       });
