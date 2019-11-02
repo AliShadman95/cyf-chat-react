@@ -4,22 +4,15 @@ var cors = require("cors");
 const express = require("express");
 const app = express();
 
-app.use(function(req, res, next) {
-  const origin = req.get("origin");
-  res.header("Access-Control-Allow-Origin", origin);
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "OPTIONS,GET, POST, PUT, DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma"
-  );
-
-  if (req.method === "OPTIONS") {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-});
+app.use(
+  express.static("public", {
+    setHeaders: function setHeaders(res, path, stat) {
+      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Methods", "GET,POST,UPDATE");
+      res.set("Access-Control-Allow-Headers", "Content-Type");
+    }
+  })
+);
 var socketio = require("socket.io");
 var http = require("http");
 const PORT = process.env.PORT || 3005;
