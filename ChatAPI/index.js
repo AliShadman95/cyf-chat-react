@@ -8,15 +8,12 @@ app.use(function(req, res, next) {
   const origin = req.get("origin");
   res.header("Access-Control-Allow-Origin", origin);
   res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Methods",
-
-    "GET, POST, PUT, DELETE"
-  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma"
   );
+
   if (req.method === "OPTIONS") {
     res.writeHead(200);
     res.end();
