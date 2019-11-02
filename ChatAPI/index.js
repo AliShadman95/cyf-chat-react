@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
+var cors = require("cors");
 const express = require("express");
 const app = express();
 app.use(cors());
@@ -10,15 +11,13 @@ const router = require("./router");
 const mongoose = require("mongoose");
 var Task = require("./api/models/chatModel"); //created model loading here
 var bodyParser = require("body-parser");
-var cors = require("cors");
 
 const server = http.createServer(app);
-const io = socketio(server, {
+const io = socketio(app, {
   handlePreflightRequest: (req, res) => {
     const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Origin": req.headers.origin,
-      "Access-Control-Allow-Credentials": true
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": req.headers.origin
     };
     res.writeHead(200, headers);
     res.end();
@@ -169,6 +168,6 @@ io.on("connection", socket => {
   });
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log("listening on *:3005");
 });
