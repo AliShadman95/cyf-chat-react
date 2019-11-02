@@ -12,7 +12,7 @@ var cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, { origins: "*:*" });
 
 const {
   addUser,
@@ -21,8 +21,6 @@ const {
   getUser,
   getUsersInRoom
 } = require("./users.js");
-
-
 
 // mongoose instance connection url connection
 mongoose.connect(process.env.MONGODB_URI, {
