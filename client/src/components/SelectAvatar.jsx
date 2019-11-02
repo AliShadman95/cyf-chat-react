@@ -41,28 +41,28 @@ const SelectAvatar = ({ onAvtClick }) => {
 
   const onAvatarClick = (firstIndex, secondIndex) => {
     if (firstIndex === 0) {
-      setSelectedAvatar(secondIndex + 1);
-      onAvtClick(secondIndex + 1);
+      setSelectedAvatar(secondIndex);
+      onAvtClick(secondIndex);
     }
     if (firstIndex === 1) {
-      setSelectedAvatar(secondIndex + 13);
-      onAvtClick(secondIndex + 13);
+      setSelectedAvatar(secondIndex + 12);
+      onAvtClick(secondIndex + 12);
     }
     if (firstIndex === 2) {
-      setSelectedAvatar(secondIndex + 25);
-      onAvtClick(secondIndex + 25);
+      setSelectedAvatar(secondIndex + 24);
+      onAvtClick(secondIndex + 24);
     }
   };
 
   const disableAvatar = (firstIndex, secondIndex) => {
     if (firstIndex === 0) {
-      return selectedAvatar === secondIndex + 1;
+      return selectedAvatar === secondIndex;
     }
     if (firstIndex === 1) {
-      return selectedAvatar === secondIndex + 13;
+      return selectedAvatar === secondIndex + 12;
     }
     if (firstIndex === 2) {
-      return selectedAvatar === secondIndex + 25;
+      return selectedAvatar === secondIndex + 24;
     }
   };
 
