@@ -84,13 +84,8 @@ const Chat = ({ location }) => {
 
   const prevRoom = usePrevious(room);
 
-  const options = {
-    headers: {
-      "Access-Control-Allow-Origin": "https://letschaaat.netlify.com/"
-    }
-  };
-
-  const ENDPOINT = "https://chat-by-as.herokuapp.com/";
+  const ENDPOINT =
+    "https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/";
   const ROOMS = ["Main", "Chill", "Evening", "Room1", "Room2", "Room3"];
 
   useEffect(() => {
@@ -177,9 +172,8 @@ const Chat = ({ location }) => {
 
       let mess = { name, avatar, message, room };
       const response = await axios.post(
-        `https://chat-by-as.herokuapp.com/messages`,
-        mess,
-        options
+        `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages`,
+        mess
       );
     }
     fetchMessages(room);
@@ -199,8 +193,7 @@ const Chat = ({ location }) => {
     const str = type === 0 ? `${value}` : `room/${room}/${value}`;
 
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/search/${str}`,
-      options
+      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/search/${str}`
     );
 
     setSearchMessagesResult(response.data);
@@ -208,16 +201,14 @@ const Chat = ({ location }) => {
 
   const fetchMessages = async room => {
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`,
-      options
+      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/rooms/${room}`
     );
     setMessages(response.data.length >= 1 ? response.data : []);
   };
 
   const deleteMessage = async id => {
     const response = await axios.delete(
-      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
-      options
+      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/id/${id}`
     );
 
     //Create copy of messages and filter out the deleted message
@@ -227,11 +218,10 @@ const Chat = ({ location }) => {
 
   const editMessage = async (id, message) => {
     const response = await axios.put(
-      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
+      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/id/${id}`,
       {
         message
-      },
-      options
+      }
     );
 
     //Create copy of messages and edit the state
@@ -245,8 +235,7 @@ const Chat = ({ location }) => {
 
   const getLatestMessages = async () => {
     const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/latest/${room}`,
-      options
+      `https://cors-anywhere.herokuapp.com/https://chat-by-as.herokuapp.com/messages/latest/${room}`
     );
 
     setMessages(response.data.reverse());
