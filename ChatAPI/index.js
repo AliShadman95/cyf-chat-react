@@ -4,11 +4,24 @@ var cors = require("cors");
 const express = require("express");
 const app = express();
 
-var corsOptions = {
-  origin: "https://letschaaat.netlify.com",
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
+app.use(function(req, res, next) {
+  const origin = req.get("origin");
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma"
+  );
+
+  // intercept OPTIONS method
+  if (req.method === "OPTIONS") {
+    res.sendStatus(204);
+  } else {
+    console.log(origin);
+    next();
+  }
+});
 var socketio = require("socket.io");
 var http = require("http");
 const PORT = process.env.PORT || 3005;
