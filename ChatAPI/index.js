@@ -4,15 +4,7 @@ var cors = require("cors");
 const express = require("express");
 const app = express();
 
-app.use(
-  express.static("public", {
-    setHeaders: function setHeaders(res, path, stat) {
-      res.set("Access-Control-Allow-Origin", "https://letschaaat.netlify.com");
-      res.set("Access-Control-Allow-Methods", "OPTIONS,GET,PUT,POST,DELETE");
-      res.set("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
-    }
-  })
-);
+app.use(cors())
 var socketio = require("socket.io");
 var http = require("http");
 const PORT = process.env.PORT || 3005;
