@@ -277,10 +277,10 @@ const Chat = ({ location }) => {
         <Grid container>
           <Grid item md={12} xl={12} xs={12}>
             <Header
-              searchMessages={(e, type) => {
-                searchMessages(e, type);
-              }}
-              searchMessagesResult={searchMessagesResult}
+            // searchMessages={(e, type) => {
+            //   searchMessages(e, type);
+            // }}
+            // searchMessagesResult={searchMessagesResult}
             />
           </Grid>
           <Grid item md={2} xl={2} sm={12} xs={12} className="mt-3">

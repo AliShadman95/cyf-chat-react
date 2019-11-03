@@ -2,10 +2,11 @@ import {
   POST_MESSAGE,
   GET_MESSAGES,
   DELETE_MESSAGE,
-  EDIT_MESSAGE
+  EDIT_MESSAGE,
+  SEARCH_MESSAGE
 } from "../actions/types";
 
-const initialState = { items: [], item: [] };
+const initialState = { items: [], item: [], searchedResults: [] };
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -24,6 +25,8 @@ export default (state = initialState, action) => {
       let editedMessIndex = copyMess.findIndex(e => e._id === action.id);
       copyMess.splice(editedMessIndex, 1, editedMess);
       return { ...state, items: copyMess };
+    case SEARCH_MESSAGE:
+      return { ...state, searchedResults: action.payload };
 
     default:
       return state;
