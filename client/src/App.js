@@ -2,15 +2,31 @@ import React from "react";
 import Chat from "./components/Chat";
 import Join from "./components/Join";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "./reducers";
 import "./App.css";
+
+const initialState = {};
+
+const middleware = [thunk];
+
+const store = createStore(
+  rootReducer,
+  initialState,
+  applyMiddleware(...middleware)
+);
 
 class App extends React.Component {
   render() {
     return (
-      <Router>
-        <Route path="/" exact component={Join} />
-        <Route path="/chat" component={Chat} />
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <Route path="/" exact component={Join} />
+          <Route path="/chat" component={Chat} />
+        </Router>
+      </Provider>
     );
   }
 }

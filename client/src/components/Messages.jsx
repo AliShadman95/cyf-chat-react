@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
+import { connect } from "react-redux";
+import { getMessages } from "../actions/messagesActions";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -16,8 +18,18 @@ const useStyles = makeStyles({
   messageBox: { alignItems: "flex-end" }
 });
 
-const Messages = ({ messages, name, onDelete, onEdit, isEditing }) => {
+const Messages = ({
+  messages,
+  name,
+  onDelete,
+  onEdit,
+  isEditing,
+  getMessages
+}) => {
   const classes = useStyles();
+  useEffect(() => {
+    getMessages();
+  }, [getMessages]);
   return (
     <ScrollToBottom className={classes.root}>
       <List>
@@ -44,4 +56,9 @@ const Messages = ({ messages, name, onDelete, onEdit, isEditing }) => {
   );
 };
 
-export default Messages;
+const mapStateToProps = state => ({ messages: state.messages.items });
+
+export default connect(
+  mapStateToProps,
+  { getMessages }
+)(Messages);

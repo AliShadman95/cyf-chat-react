@@ -353,7 +353,7 @@ const Chat = ({ location }) => {
               <div className="row">
                 <div className={classes.messageHeightBreak + " col-md-12 mt-3"}>
                   <Messages
-                    messages={messages}
+                    // messages={messages}
                     name={name}
                     onDelete={deleteMessage}
                     onEdit={editMessage}
