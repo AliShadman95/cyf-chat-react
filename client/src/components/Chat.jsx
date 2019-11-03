@@ -16,7 +16,8 @@ import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-let socket;
+const ENDPOINT = "https://chat-by-as.herokuapp.com/";
+const socket = io(ENDPOINT);
 
 const usePrevious = value => {
   const ref = useRef();
@@ -84,18 +85,19 @@ const Chat = ({ location }) => {
 
   const prevRoom = usePrevious(room);
 
-  const ENDPOINT = "https://chat-by-as.herokuapp.com/";
   const ROOMS = ["Main", "Chill", "Evening", "Room1", "Room2", "Room3"];
 
   useEffect(() => {
     const { name, avatar } = queryString.parse(location.search);
-    socket = io(ENDPOINT);
-    setName(name);
-    setRooms(ROOMS);
-    setAvatar(avatar);
 
+    /* setName(name); */
+    setRooms(ROOMS);
+    /* setAvatar(avatar); */
+
+    console.log("calling join emit");
     //Emmiting Join
-    socket.emit("join", { name, avatar, room }, error => {
+    socket.emit("join", { name, avatar, room: "main" }, error => {
+      console.log("inside join emit, added user");
       console.log(error);
     });
 
@@ -108,7 +110,7 @@ const Chat = ({ location }) => {
     };
   }, [ENDPOINT, location.search]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     //When we get messages from server
     socket.on("message", message => {
       setMessages([...messages, message]);
@@ -123,9 +125,9 @@ const Chat = ({ location }) => {
 
       socket.off();
     };
-  }, [messages]);
+  }, [messages]); */
 
-  useEffect(() => {
+  /*  useEffect(() => {
     //We will not run this Effect on mount
     if (room === prevRoom || !prevRoom) {
       return;
@@ -145,7 +147,7 @@ const Chat = ({ location }) => {
 
       socket.off();
     };
-  }, [room]);
+  }, [room]); */
 
   useEffect(() => {
     socket.on("IS_TYPING", ({ name }) => {
@@ -355,6 +357,7 @@ const Chat = ({ location }) => {
                   <Messages
                     // messages={messages}
                     name={name}
+                    socket={socket}
                     // onDelete={deleteMessage}
                     // onEdit={editMessage}
                   />
@@ -365,6 +368,7 @@ const Chat = ({ location }) => {
                   <Form
                     onInputChange={handleInputChange}
                     message={message}
+                    socket={socket}
                     sendMessage={ev => {
                       sendMessage(ev);
                     }}

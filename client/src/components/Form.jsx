@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   alignselfcenter: { alignSelf: "center" },
   button: { boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }
 }));
-const Form = ({ postMessage, getMessages }) => {
+const Form = ({ postMessage, getMessages, socket }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -52,9 +52,15 @@ const Form = ({ postMessage, getMessages }) => {
 
   const sendMessage = ev => {
     ev.preventDefault();
+    //We send the message and then we set the Input State to empty string
+    if (inputValue) {
+      console.log("sendeding messaghe");
+      socket.emit("SEND_MESSAGE", inputValue, () => {
+        setInputValue("");
+      });
+    }
     let mess = { name: "test", avatar: "1", message: inputValue, room: "main" };
     postMessage(mess);
-    setInputValue("");
   };
   return (
     <Grid container>

@@ -3,7 +3,7 @@ import { Box, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
 import { connect } from "react-redux";
-import { getMessages } from "../actions/messagesActions";
+import { getMessages, setMessage } from "../actions/messagesActions";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -19,17 +19,37 @@ const useStyles = makeStyles({
 });
 
 const Messages = ({
+  socket,
   messages,
-  name,
   onDelete,
   onEdit,
-  isEditing,
+  setMessage,
   getMessages
 }) => {
   const classes = useStyles();
+
   useEffect(() => {
     getMessages("main");
   }, [getMessages]);
+
+  useEffect(() => {
+    console.log("called message effect");
+    //When we get messages from server
+    socket.on("message", message => {
+      console.log(message, "GOT THIS");
+      setMessage(message);
+    });
+    //We get the room data with users logged in
+    socket.on("roomData", ({ users }) => {
+      /* setUsers(users); */
+    });
+
+    return () => {
+      socket.emit("disconnect");
+      socket.off();
+    };
+  }, [messages]);
+
   return (
     <ScrollToBottom className={classes.root}>
       <List>
@@ -60,5 +80,5 @@ const mapStateToProps = state => ({ messages: state.messages.items });
 
 export default connect(
   mapStateToProps,
-  { getMessages }
+  { getMessages, setMessage }
 )(Messages);

@@ -3,7 +3,8 @@ import {
   POST_MESSAGE,
   DELETE_MESSAGE,
   EDIT_MESSAGE,
-  SEARCH_MESSAGE
+  SEARCH_MESSAGE,
+  EMIT_MESSAGE
 } from "./types";
 import axios from "axios";
 
@@ -16,13 +17,23 @@ export const getMessages = room => async dispatch => {
 };
 
 export const postMessage = user => async dispatch => {
-  console.log("about to post");
+  console.log("about to POST");
   const response = await axios.post(
     `https://chat-by-as.herokuapp.com/messages`,
     user
   );
   dispatch({ type: POST_MESSAGE, payload: response.data });
   // dispatch(getMessages(user.room));
+};
+
+export const emitMessage = message => async dispatch => {
+  console.log("about to EMIT");
+  dispatch({ type: POST_MESSAGE, payload: message });
+};
+
+export const setMessage = user => async dispatch => {
+  console.log("about to SET");
+  dispatch({ type: POST_MESSAGE, payload: user });
 };
 
 export const deleteMessage = id => async dispatch => {
@@ -46,7 +57,7 @@ export const editMessage = (id, message) => async dispatch => {
   dispatch({ type: EDIT_MESSAGE, id: id, message });
 };
 
-export const searchMessage = (value, type) => async dispatch => {
+export const searchMessage = (room, value, type) => async dispatch => {
   const str = type === 0 ? `${value}` : `room/${room}/${value}`;
   const response = await axios.get(
     `https://chat-by-as.herokuapp.com/messages/search/${str}`

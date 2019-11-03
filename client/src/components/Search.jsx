@@ -22,7 +22,7 @@ import Moment from "react-moment";
 import clsx from "clsx";
 import { green } from "@material-ui/core/colors";
 import { connect } from "react-redux";
-import { postMessage, getMessages } from "../actions/messagesActions";
+import { searchMessage } from "../actions/messagesActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -133,7 +133,7 @@ const calendarStrings = {
   sameElse: "L"
 };
 
-const Search = () => {
+const Search = ({ searchMessage, messages }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedCollapse, setSelectedCollapse] = React.useState(-1);
@@ -142,14 +142,13 @@ const Search = () => {
 
   const handleRadioChange = event => {
     setSelectedRadio(event.target.value);
-
-    // searchMessages(searchValue, event.target.value === "c" ? 0 : 1);
+    searchMessage("main", searchValue, event.target.value === "c" ? 0 : 1);
   };
 
   const handleClick = event => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
-    searchMessages(searchValue, 1);
+    searchMessage("main", searchValue, 1);
   };
 
   const onInputChange = ev => {
@@ -230,7 +229,7 @@ const Search = () => {
             </RadioGroup>
           </FormControl>
         </Box>
-        {searchMessagesResult.map((message, i) => {
+        {messages.map((message, i) => {
           return (
             <div key={i}>
               <StyledMenuItem
@@ -278,4 +277,9 @@ const Search = () => {
   );
 };
 
-export default Search;
+const mapStateToProps = state => ({ messages: state.messages.searchedResults });
+
+export default connect(
+  mapStateToProps,
+  { searchMessage }
+)(Search);
