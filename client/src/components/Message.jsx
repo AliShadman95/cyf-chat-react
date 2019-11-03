@@ -19,6 +19,8 @@ import images from "../helpers/Images";
 import Moment from "react-moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Twemoji } from "react-emoji-render";
+import { connect } from "react-redux";
+import { editMessage } from "../actions/messagesActions";
 
 const useStyles = makeStyles(theme => ({
   whiteText: {
@@ -42,7 +44,7 @@ const calendarStrings = {
   sameElse: "L"
 };
 
-const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
+const Message = ({ message, name, date, avatar, editMessage, id }) => {
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message);
@@ -60,13 +62,13 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
     setEditedMessage(e.target.value);
   };
 
-  const editMessage = e => {
+  const onEdit = e => {
     setIsEditing(true);
   };
 
   const sendEditMessage = e => {
     e.preventDefault();
-    onEdit(id, editedMessage);
+    editMessage(id, editedMessage);
     setIsEditing(false);
   };
 
@@ -143,7 +145,7 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
 
         {name !== "Admin" && (
           <Box className={classes.menuRight}>
-            <EditMessage onDelete={onDelete} onEdit={editMessage} id={id} />
+            <EditMessage onEdit={onEdit} id={id} />
           </Box>
         )}
       </ListItem>
@@ -151,4 +153,7 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
   );
 };
 
-export default Message;
+export default connect(
+  null,
+  { editMessage }
+)(Message);

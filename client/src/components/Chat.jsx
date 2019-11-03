@@ -355,8 +355,8 @@ const Chat = ({ location }) => {
                   <Messages
                     // messages={messages}
                     name={name}
-                    onDelete={deleteMessage}
-                    onEdit={editMessage}
+                    // onDelete={deleteMessage}
+                    // onEdit={editMessage}
                   />
                 </div>
               </div>

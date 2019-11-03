@@ -1,2 +1,4 @@
 export const POST_MESSAGE = "POST_MESSAGE";
 export const GET_MESSAGES = "GET_MESSAGES";
+export const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const EDIT_MESSAGE = "EDIT_MESSAGE";

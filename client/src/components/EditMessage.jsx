@@ -15,6 +15,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { deleteMessage } from "../actions/messagesActions";
 
 const StyledMenu = withStyles({
   paper: {
@@ -47,7 +49,7 @@ const StyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem);
 
-const EditMessage = ({ onDelete, onEdit, id, thereIsId }) => {
+const EditMessage = ({ deleteMessage, onEdit, id }) => {
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -58,6 +60,11 @@ const EditMessage = ({ onDelete, onEdit, id, thereIsId }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const onDelete = id => {
+    deleteMessage(id);
+  };
+
   return (
     <Box>
       <IconButton onClick={handleClick}>
@@ -109,4 +116,7 @@ const EditMessage = ({ onDelete, onEdit, id, thereIsId }) => {
   );
 };
 
-export default EditMessage;
+export default connect(
+  null,
+  { deleteMessage }
+)(EditMessage);
