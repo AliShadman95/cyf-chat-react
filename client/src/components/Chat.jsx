@@ -175,13 +175,13 @@ const Chat = ({ location }) => {
         setMessage("");
       });
 
-      let mess = { name, avatar, message, room };
+      // let mess = { name, avatar, message, room };
       // const response = await axios.post(
       //   `https://chat-by-as.herokuapp.com/messages`,
       //   mess
       // );
     }
-    fetchMessages(room);
+    // fetchMessages(room);
   };
 
   const changeRoom = async Room => {

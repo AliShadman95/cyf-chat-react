@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { connect } from "react-redux";
-import { postMessage } from "../actions/messagesActions";
+import { postMessage, getMessages } from "../actions/messagesActions";
 
 const CssTextField = withStyles({
   root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   alignselfcenter: { alignSelf: "center" },
   button: { boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }
 }));
-const Form = ({ postMessage }) => {
+const Form = ({ postMessage, getMessages }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -95,5 +95,5 @@ const Form = ({ postMessage }) => {
 
 export default connect(
   null,
-  { postMessage }
+  { postMessage, getMessages }
 )(Form);

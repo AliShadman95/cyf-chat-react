@@ -9,11 +9,12 @@ export const getMessages = room => async dispatch => {
   dispatch({ type: GET_MESSAGES, payload: response.data });
 };
 
-export const postMessage = message => async dispatch => {
+export const postMessage = user => async dispatch => {
   console.log("about to post");
   const response = await axios.post(
     `https://chat-by-as.herokuapp.com/messages`,
-    message
+    user
   );
   dispatch({ type: POST_MESSAGE, payload: response.data });
+  dispatch(getMessages(user.room));
 };

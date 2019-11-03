@@ -1,14 +1,15 @@
-import { GET_MESSAGES, POST_MESSAGE } from "../actions/types";
+import { POST_MESSAGE, GET_MESSAGES } from "../actions/types";
 
 const initialState = { items: [], item: [] };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case GET_MESSAGES:
-      return { ...state, items: action.payload };
     case POST_MESSAGE:
-      console.log("inside recuder");
+      console.log("inside post mess r ");
       return { ...state, item: action.payload };
+    case GET_MESSAGES:
+      console.log("inside get mess r");
+      return { ...state, items: action.payload };
     default:
       return state;
   }
