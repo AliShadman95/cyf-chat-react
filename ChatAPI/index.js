@@ -25,6 +25,7 @@ const io = socketio(server, {
     res.end();
   }
 });
+io.origins('*:*')
 
 const {
   addUser,
