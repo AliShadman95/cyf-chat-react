@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 
 app.use(cors());
-var socketio = require("socket.io")(server, { origins: '*:*'});;
+var socketio = require("socket.io")(server, { origins: '*:*'});
 var http = require("http");
 const PORT = process.env.PORT || 3005;
 const router = require("./router");
