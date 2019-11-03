@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import getMessages from "./getMessages.js";
+import messagesReducer from "./messagesReducer.js";
 
-export default combineReducers({ messages: getMessages });
+export default combineReducers({ messages: messagesReducer });

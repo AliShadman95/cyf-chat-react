@@ -96,7 +96,8 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
                   variant="body2"
                   className={classes.whiteText}
                 >
-                  <Twemoji svg text={message} />
+                  {message}
+                  {/* <Twemoji svg text={message} /> */}
                 </Typography>
               )}
             </React.Fragment>

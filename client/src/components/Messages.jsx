@@ -28,7 +28,7 @@ const Messages = ({
 }) => {
   const classes = useStyles();
   useEffect(() => {
-    getMessages();
+    getMessages("main");
   }, [getMessages]);
   return (
     <ScrollToBottom className={classes.root}>

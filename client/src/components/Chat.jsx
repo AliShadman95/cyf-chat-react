@@ -99,8 +99,8 @@ const Chat = ({ location }) => {
       console.log(error);
     });
 
-    // Database fetch
-    fetchMessages("main");
+    // // Database fetch
+    // fetchMessages("main");
 
     return () => {
       socket.emit("disconnect");
@@ -176,10 +176,10 @@ const Chat = ({ location }) => {
       });
 
       let mess = { name, avatar, message, room };
-      const response = await axios.post(
-        `https://chat-by-as.herokuapp.com/messages`,
-        mess
-      );
+      // const response = await axios.post(
+      //   `https://chat-by-as.herokuapp.com/messages`,
+      //   mess
+      // );
     }
     fetchMessages(room);
   };

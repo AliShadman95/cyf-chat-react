@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { connect } from "react-redux";
+import { postMessage } from "../actions/messagesActions";
 
 const CssTextField = withStyles({
   root: {
@@ -38,11 +40,22 @@ const useStyles = makeStyles(theme => ({
   alignselfcenter: { alignSelf: "center" },
   button: { boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }
 }));
-const Form = ({ onInputChange, message, sendMessage }) => {
+const Form = ({ postMessage }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const [inputValue, setInputValue] = React.useState("");
 
+  const onInputChange = ev => {
+    setInputValue(ev.target.value);
+  };
+
+  const sendMessage = ev => {
+    ev.preventDefault();
+    let mess = { name: "test", avatar: "1", message: inputValue, room: "main" };
+    postMessage(mess);
+    setInputValue("");
+  };
   return (
     <Grid container>
       <Grid item md={10} xl={10} xs={8}>
@@ -51,7 +64,7 @@ const Form = ({ onInputChange, message, sendMessage }) => {
           id="filled-full-width"
           fullWidth
           margin="normal"
-          value={message}
+          value={inputValue}
           onChange={ev => onInputChange(ev)}
           onKeyPress={ev => (ev.key === "Enter" ? sendMessage(ev) : null)}
         />
@@ -80,4 +93,7 @@ const Form = ({ onInputChange, message, sendMessage }) => {
   );
 };
 
-export default Form;
+export default connect(
+  null,
+  { postMessage }
+)(Form);
