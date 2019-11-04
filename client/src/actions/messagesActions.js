@@ -3,8 +3,7 @@ import {
   POST_MESSAGE,
   DELETE_MESSAGE,
   EDIT_MESSAGE,
-  SEARCH_MESSAGE,
-  EMIT_MESSAGE
+  SEARCH_MESSAGE
 } from "./types";
 import axios from "axios";
 
@@ -14,6 +13,14 @@ export const getMessages = room => async dispatch => {
     `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
   );
   dispatch({ type: GET_MESSAGES, payload: response.data });
+};
+
+export const getLatestMessages = room => async dispatch => {
+  const response = await axios.get(
+    `https://chat-by-as.herokuapp.com/messages/latest/${room}`
+  );
+
+  dispatch({ type: GET_MESSAGES, payload: response.data.reverse() });
 };
 
 export const postMessage = user => async dispatch => {

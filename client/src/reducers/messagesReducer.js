@@ -3,8 +3,7 @@ import {
   GET_MESSAGES,
   DELETE_MESSAGE,
   EDIT_MESSAGE,
-  SEARCH_MESSAGE,
-  EMIT_MESSAGE
+  SEARCH_MESSAGE
 } from "../actions/types";
 
 const initialState = { items: [], item: [], searchedResults: [] };
@@ -17,7 +16,9 @@ export default (state = initialState, action) => {
       let copyArr = [...state.items];
       let copyAction = [...action.payload];
       if (copyArr[0]) {
-        copyAction.push(copyArr[0]);
+        if (copyArr[0].length < 1) {
+          copyAction.push(copyArr[0]);
+        }
       }
       return {
         ...state,
@@ -34,8 +35,7 @@ export default (state = initialState, action) => {
       let editedMessIndex = copyMess.findIndex(e => e._id === action.id);
       copyMess.splice(editedMessIndex, 1, editedMess);
       return { ...state, items: copyMess };
-    case EMIT_MESSAGE:
-      return { ...state, items: [...state.items, action.payload] };
+
     case SEARCH_MESSAGE:
       return { ...state, searchedResults: action.payload };
 

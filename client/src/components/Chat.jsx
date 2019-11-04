@@ -10,22 +10,12 @@ import axios from "axios";
 import Header from "../components/Header";
 import IsTyping from "../components/IsTyping";
 import Box from "@material-ui/core/Box";
-import { mdiReload } from "@mdi/js";
-import Icon from "@mdi/react";
-import Chip from "@material-ui/core/Chip";
+import FetchChips from "./FetchChips";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 const ENDPOINT = "https://chat-by-as.herokuapp.com/";
 const socket = io(ENDPOINT);
-
-const usePrevious = value => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
 
 const useStyles = makeStyles(theme => ({
   chipsXS: {
@@ -69,30 +59,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Chat = ({ location }) => {
+const Chat = ({ setUsers, location }) => {
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [room, setRoom] = useState("main");
-  const [avatar, setAvatar] = useState(0);
-  const [rooms, setRooms] = useState([]);
-  const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [searchMessagesResult, setSearchMessagesResult] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState(" is typing..");
 
-  const prevRoom = usePrevious(room);
-
-  const ROOMS = ["Main", "Chill", "Evening", "Room1", "Room2", "Room3"];
-
   useEffect(() => {
     const { name, avatar } = queryString.parse(location.search);
-
-    /* setName(name); */
-    setRooms(ROOMS);
-    /* setAvatar(avatar); */
 
     console.log("calling join emit");
     //Emmiting Join
@@ -101,53 +80,11 @@ const Chat = ({ location }) => {
       console.log(error);
     });
 
-    // // Database fetch
-    // fetchMessages("main");
-
     return () => {
       socket.emit("disconnect");
       socket.off();
     };
   }, [ENDPOINT, location.search]);
-
-  /*  useEffect(() => {
-    //When we get messages from server
-    socket.on("message", message => {
-      setMessages([...messages, message]);
-    });
-    //We get the room data with users logged in
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
-    });
-
-    return () => {
-      socket.emit("disconnect");
-
-      socket.off();
-    };
-  }, [messages]); */
-
-  /*  useEffect(() => {
-    //We will not run this Effect on mount
-    if (room === prevRoom || !prevRoom) {
-      return;
-    }
-
-    // Emmiting change room to server
-    socket.emit("CHANGE_ROOM", { room }, error => {
-      console.log(error);
-    });
-    // Getting room data from server
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
-    });
-
-    return () => {
-      socket.emit("disconnect");
-
-      socket.off();
-    };
-  }, [room]); */
 
   useEffect(() => {
     socket.on("IS_TYPING", ({ name }) => {
@@ -167,86 +104,6 @@ const Chat = ({ location }) => {
       setUserTyping(message);
     });
   }, [isTyping]);
-
-  //function for sending message
-  const sendMessage = async ev => {
-    ev.preventDefault();
-    //We send the message and then we set the Input State to empty string
-    if (message) {
-      socket.emit("SEND_MESSAGE", message, () => {
-        setMessage("");
-      });
-
-      // let mess = { name, avatar, message, room };
-      // const response = await axios.post(
-      //   `https://chat-by-as.herokuapp.com/messages`,
-      //   mess
-      // );
-    }
-    // fetchMessages(room);
-  };
-
-  const changeRoom = async Room => {
-    // Return if click on the same room
-    if (room === Room) {
-      return;
-    }
-
-    fetchMessages(Room);
-    setRoom(Room);
-  };
-
-  const searchMessages = async (value, type) => {
-    const str = type === 0 ? `${value}` : `room/${room}/${value}`;
-
-    const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/search/${str}`
-    );
-
-    setSearchMessagesResult(response.data);
-  };
-
-  const fetchMessages = async room => {
-    const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/rooms/${room}`
-    );
-    setMessages(response.data.length >= 1 ? response.data : []);
-  };
-
-  const deleteMessage = async id => {
-    const response = await axios.delete(
-      `https://chat-by-as.herokuapp.com/messages/id/${id}`
-    );
-
-    //Create copy of messages and filter out the deleted message
-    let copyMess = [...messages];
-    setMessages(copyMess.filter(e => e._id !== id));
-  };
-
-  const editMessage = async (id, message) => {
-    const response = await axios.put(
-      `https://chat-by-as.herokuapp.com/messages/id/${id}`,
-      {
-        message
-      }
-    );
-
-    //Create copy of messages and edit the state
-    let copyMess = [...messages];
-    let editedMess = copyMess.find(e => e._id === id);
-    editedMess.message = message;
-    let editedMessIndex = copyMess.findIndex(e => e._id === id);
-    copyMess.splice(editedMessIndex, 1, editedMess);
-    setMessages(copyMess);
-  };
-
-  const getLatestMessages = async () => {
-    const response = await axios.get(
-      `https://chat-by-as.herokuapp.com/messages/latest/${room}`
-    );
-
-    setMessages(response.data.reverse());
-  };
 
   const typingstopped = () => {
     console.log("called");
@@ -278,75 +135,15 @@ const Chat = ({ location }) => {
       <Container maxWidth="xl">
         <Grid container>
           <Grid item md={12} xl={12} xs={12}>
-            <Header
-            // searchMessages={(e, type) => {
-            //   searchMessages(e, type);
-            // }}
-            // searchMessagesResult={searchMessagesResult}
-            />
+            <Header />
           </Grid>
           <Grid item md={2} xl={2} sm={12} xs={12} className="mt-3">
             <Box className={classes.roomHeightBreak}>
-              <Rooms
-                rooms={rooms}
-                currentRoom={room}
-                users={users}
-                changeRoom={changeRoom}
-              />
+              <Rooms socket={socket} />
             </Box>
             <Box className="mt-4">
               <Box className={classes.chipsXS}>
-                <Chip
-                  style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
-                  avatar={
-                    <Icon
-                      path={mdiReload}
-                      title="reload"
-                      size={1}
-                      color="white"
-                    />
-                  }
-                  label={
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      style={{ color: "white" }}
-                    >
-                      Fetch all
-                    </Typography>
-                  }
-                  onClick={e => {
-                    e.preventDefault();
-                    fetchMessages(room);
-                  }}
-                  variant="outlined"
-                />
-                <Chip
-                  style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
-                  avatar={
-                    <Icon
-                      path={mdiReload}
-                      title="reload"
-                      size={1}
-                      color="white"
-                    />
-                  }
-                  label={
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      style={{ color: "white" }}
-                    >
-                      Last 10
-                    </Typography>
-                  }
-                  onClick={e => {
-                    e.preventDefault();
-                    getLatestMessages();
-                  }}
-                  variant="outlined"
-                  className="ml-2"
-                />
+                <FetchChips />
               </Box>
             </Box>
           </Grid>
@@ -365,14 +162,7 @@ const Chat = ({ location }) => {
               </div>
               <div className="row mt-2">
                 <div className="col-md-12 col-xs-12">
-                  <Form
-                    onInputChange={handleInputChange}
-                    message={message}
-                    socket={socket}
-                    sendMessage={ev => {
-                      sendMessage(ev);
-                    }}
-                  />
+                  <Form socket={socket} />
                 </div>
               </div>
               <div className="row">

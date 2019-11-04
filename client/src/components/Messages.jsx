@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
 import { connect } from "react-redux";
 import { getMessages, setMessage } from "../actions/messagesActions";
+import { setUsers } from "../actions/usersActions";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -23,6 +24,7 @@ const Messages = ({
   messages,
   onDelete,
   onEdit,
+  setUsers,
   setMessage,
   getMessages
 }) => {
@@ -41,7 +43,7 @@ const Messages = ({
     });
     //We get the room data with users logged in
     socket.on("roomData", ({ users }) => {
-      /* setUsers(users); */
+      setUsers(users);
     });
 
     return () => {
@@ -80,5 +82,5 @@ const mapStateToProps = state => ({ messages: state.messages.items });
 
 export default connect(
   mapStateToProps,
-  { getMessages, setMessage }
+  { getMessages, setMessage, setUsers }
 )(Messages);
