@@ -59,20 +59,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Chat = ({ setUsers, location }) => {
+const Chat = ({ location }) => {
   const classes = useStyles();
-
   const [name, setName] = useState("");
-  const [room, setRoom] = useState("main");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [searchMessagesResult, setSearchMessagesResult] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [userTyping, setUserTyping] = useState(" is typing..");
 
   useEffect(() => {
     const { name, avatar } = queryString.parse(location.search);
-
+    setName(name);
     console.log("calling join emit");
     //Emmiting Join
     socket.emit("join", { name, avatar, room: "main" }, error => {
@@ -85,50 +78,6 @@ const Chat = ({ setUsers, location }) => {
       socket.off();
     };
   }, [ENDPOINT, location.search]);
-
-  useEffect(() => {
-    socket.on("IS_TYPING", ({ name }) => {
-      //Concat the name of the user that is typing to " is typing..."
-      const userTyp = userTyping;
-      if (userTyp !== " is typing..") {
-        const reg = userTyp.match(/\S+/g);
-        const string = name.concat(` and ${reg[0]} are typing... `);
-        setUserTyping(string);
-      } else {
-        const string = name.concat(userTyp);
-        setUserTyping(string);
-      }
-    });
-
-    socket.on("IS_NOT_TYPING", ({ message }) => {
-      setUserTyping(message);
-    });
-  }, [isTyping]);
-
-  const typingstopped = () => {
-    console.log("called");
-    if (isTyping !== false) setIsTyping(false);
-    socket.emit("SEND_IS_NOT_TYPING", { room, name }, error => {
-      console.log(error);
-    });
-  };
-
-  const handleInputChange = e => {
-    setMessage(e.target.value);
-    let time;
-    if (isTyping === false) {
-      setIsTyping(true);
-      console.log("sending ");
-      socket.emit("SEND_IS_TYPING", { room, name }, error => {
-        console.log(error);
-      });
-      time = setTimeout(typingstopped, 4000);
-    } else {
-      clearTimeout(time);
-      time = setTimeout(typingstopped, 4000);
-      clearTimeout(time);
-    }
-  };
 
   return (
     <div className="App">
@@ -151,23 +100,17 @@ const Chat = ({ setUsers, location }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className={classes.messageHeightBreak + " col-md-12 mt-3"}>
-                  <Messages
-                    // messages={messages}
-                    name={name}
-                    socket={socket}
-                    // onDelete={deleteMessage}
-                    // onEdit={editMessage}
-                  />
+                  <Messages socket={socket} />
                 </div>
               </div>
               <div className="row mt-2">
                 <div className="col-md-12 col-xs-12">
-                  <Form socket={socket} />
+                  <Form socket={socket} name={name} />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6 col-xs-6 text-left">
-                  <IsTyping userTyping={userTyping} />
+                  <IsTyping />
                 </div>
                 <div className="col-md-6 col-xs-6 text-right pt-2">
                   <Typography

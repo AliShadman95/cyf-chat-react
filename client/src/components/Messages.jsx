@@ -5,6 +5,7 @@ import Message from "./Message";
 import { connect } from "react-redux";
 import { getMessages, setMessage } from "../actions/messagesActions";
 import { setUsers } from "../actions/usersActions";
+import { setUserTyping } from "../actions/userTypingActions";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -26,7 +27,8 @@ const Messages = ({
   onEdit,
   setUsers,
   setMessage,
-  getMessages
+  getMessages,
+  setUserTyping
 }) => {
   const classes = useStyles();
 
@@ -39,6 +41,9 @@ const Messages = ({
     //When we get messages from server
     socket.on("message", message => {
       console.log(message, "GOT THIS");
+      if (message.message.includes("has left")) {
+        setUserTyping(" is typing..");
+      }
       setMessage(message);
     });
     //We get the room data with users logged in
@@ -82,5 +87,5 @@ const mapStateToProps = state => ({ messages: state.messages.items });
 
 export default connect(
   mapStateToProps,
-  { getMessages, setMessage, setUsers }
+  { getMessages, setMessage, setUsers, setUserTyping }
 )(Messages);

@@ -7,3 +7,4 @@ export const SET_MESSAGE = "SET_MESSAGE";
 export const ADD_USER = "ADD_USER";
 export const SET_USERS = "SET_USERS";
 export const SET_ROOM = "SET_ROOM";
+export const SET_USER_TYPING = "SET_USER_TYPING";

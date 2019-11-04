@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
@@ -8,6 +8,7 @@ import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { connect } from "react-redux";
 import { postMessage, getMessages } from "../actions/messagesActions";
+import { setUserTyping } from "../actions/userTypingActions";
 
 const CssTextField = withStyles({
   root: {
@@ -40,14 +41,63 @@ const useStyles = makeStyles(theme => ({
   alignselfcenter: { alignSelf: "center" },
   button: { boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }
 }));
-const Form = ({ postMessage, getMessages, socket }) => {
+const Form = ({
+  postMessage,
+  setUserTyping,
+  userTyping,
+  socket,
+  room,
+  name
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    socket.on("IS_TYPING", ({ name }) => {
+      //Concat the name of the user that is typing to " is typing..."
+      const userTyp = userTyping;
+      if (userTyp !== " is typing.." && userTyp !== `${name} is typing..`) {
+        const reg = userTyp.match(/\S+/g);
+        const string = name.concat(` and ${reg[0]} are typing... `);
+        setUserTyping(string);
+      } else {
+        const string = name.concat(userTyp);
+        setUserTyping(string);
+      }
+    });
+
+    socket.on("IS_NOT_TYPING", ({ message }) => {
+      setUserTyping(message);
+    });
+  }, [isTyping]);
+
+  const typingstopped = () => {
+    console.log("called typing stopped");
+    setIsTyping(false);
+    socket.emit("SEND_IS_NOT_TYPING", { room, name }, error => {
+      console.log(error);
+    });
+  };
 
   const onInputChange = ev => {
     setInputValue(ev.target.value);
+    let time;
+    if (isTyping === false) {
+      console.log("inside is typing");
+      setIsTyping(true);
+      console.log("sending ");
+      socket.emit("SEND_IS_TYPING", { room, name }, error => {
+        console.log(error);
+      });
+      time = setTimeout(typingstopped, 4000);
+    } else {
+      clearTimeout(time);
+      time = setTimeout(typingstopped, 4000);
+      clearTimeout(time);
+    }
   };
 
   const sendMessage = ev => {
@@ -62,6 +112,7 @@ const Form = ({ postMessage, getMessages, socket }) => {
     let mess = { name: "test", avatar: "1", message: inputValue, room: "main" };
     postMessage(mess);
   };
+
   return (
     <Grid container>
       <Grid item md={10} xl={10} xs={8}>
@@ -99,7 +150,12 @@ const Form = ({ postMessage, getMessages, socket }) => {
   );
 };
 
+const mapStateToProps = state => ({
+  userTyping: state.userTyping.item,
+  room: state.room.item
+});
+
 export default connect(
-  null,
-  { postMessage, getMessages }
+  mapStateToProps,
+  { postMessage, getMessages, setUserTyping }
 )(Form);
