@@ -71,14 +71,15 @@ io.on("connection", socket => {
     socket.emit("message", {
       name: "Admin",
       message: `${user.name}, Welcome!`,
-      room: user.room
+      room: user.room,
+      type: "ADMIN"
     });
     //For all beside the sender client
     socket.broadcast.to(user.room).emit("message", {
       name: "Admin",
-
       message: `${user.name} has joined!`,
-      room: user.room
+      room: user.room,
+      type: "ADMIN"
     });
 
     io.to(user.room).emit("roomData", {
@@ -113,13 +114,15 @@ io.on("connection", socket => {
     socket.broadcast.to(user.room).emit("message", {
       name: "Admin",
       message: `${user.name} has joined!`,
-      room: user.room
+      room: user.room,
+      type: "ADMIN"
     });
 
     socket.broadcast.to(user.prevRoom).emit("message", {
       name: "Admin",
       message: `${user.name} has left.`,
-      room: user.room
+      room: user.room,
+      type: "ADMIN"
     });
 
     io.to(user.room).emit("roomData", {
@@ -153,6 +156,22 @@ io.on("connection", socket => {
     callback();
   });
 
+  socket.on("DELETE", ({ room }, callback) => {
+    socket.broadcast.to(room).emit("message", {
+      type: "ON_DELETE"
+    });
+
+    callback();
+  });
+
+  socket.on("EDIT", ({ room }, callback) => {
+    socket.broadcast.to(room).emit("message", {
+      type: "ON_EDIT"
+    });
+
+    callback();
+  });
+
   socket.on("disconnect", function() {
     const user = removeUser(socket.id);
 
@@ -160,7 +179,8 @@ io.on("connection", socket => {
       io.to(user.room).emit("message", {
         name: "Admin",
         message: `${user.name} has left.`,
-        room: user.room
+        room: user.room,
+        type: "ADMIN"
       });
       io.to(user.room).emit("roomData", {
         room: user.room,
