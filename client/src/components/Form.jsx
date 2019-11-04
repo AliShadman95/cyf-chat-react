@@ -47,7 +47,8 @@ const Form = ({
   userTyping,
   socket,
   room,
-  name
+  name,
+  avatar
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -109,7 +110,7 @@ const Form = ({
         setInputValue("");
       });
     }
-    let mess = { name: "test", avatar: "1", message: inputValue, room: "main" };
+    let mess = { name, avatar, message: inputValue, room: "main" };
     postMessage(mess);
   };
 

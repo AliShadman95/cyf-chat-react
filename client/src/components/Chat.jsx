@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import Form from "../components/Form";
 import Rooms from "./Rooms";
 import Messages from "./Messages";
-import axios from "axios";
 import Header from "../components/Header";
 import IsTyping from "../components/IsTyping";
 import Box from "@material-ui/core/Box";
@@ -62,10 +61,12 @@ const useStyles = makeStyles(theme => ({
 const Chat = ({ location }) => {
   const classes = useStyles();
   const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState(0);
 
   useEffect(() => {
     const { name, avatar } = queryString.parse(location.search);
     setName(name);
+    setAvatar(avatar);
     console.log("calling join emit");
     //Emmiting Join
     socket.emit("join", { name, avatar, room: "main" }, error => {
@@ -100,12 +101,12 @@ const Chat = ({ location }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className={classes.messageHeightBreak + " col-md-12 mt-3"}>
-                  <Messages socket={socket} />
+                  <Messages socket={socket} name={name} />
                 </div>
               </div>
               <div className="row mt-2">
                 <div className="col-md-12 col-xs-12">
-                  <Form socket={socket} name={name} />
+                  <Form socket={socket} name={name} avatar={avatar} />
                 </div>
               </div>
               <div className="row">
@@ -131,34 +132,3 @@ const Chat = ({ location }) => {
 };
 
 export default Chat;
-
-// constructor(props) {
-//   super(props);
-
-//   this.state = {
-//     username: queryString.parse(props.location.search),
-//     message: "",
-//     messages: []
-//   };
-
-//   this.socket = io("localhost:3005");
-
-//   this.sendMessage = ev => {
-//     ev.preventDefault();
-//     this.socket.emit("SEND_MESSAGE", {
-//       author: this.state.username.name,
-//       message: this.state.message
-//     });
-//     this.setState({ message: "" });
-//   };
-
-//   this.socket.on("RECEIVE_MESSAGE", function(data) {
-//     addMessage(data);
-//   });
-
-//   const addMessage = data => {
-//     console.log(data);
-//     this.setState({ messages: [...this.state.messages, data] });
-//     console.log(this.state.messages);
-//   };
-// }

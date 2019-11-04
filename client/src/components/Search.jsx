@@ -133,7 +133,7 @@ const calendarStrings = {
   sameElse: "L"
 };
 
-const Search = ({ searchMessage, messages }) => {
+const Search = ({ searchMessage, messages, room }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedCollapse, setSelectedCollapse] = React.useState(-1);
@@ -142,13 +142,13 @@ const Search = ({ searchMessage, messages }) => {
 
   const handleRadioChange = event => {
     setSelectedRadio(event.target.value);
-    searchMessage("main", searchValue, event.target.value === "c" ? 0 : 1);
+    searchMessage(room, searchValue, event.target.value === "c" ? 0 : 1);
   };
 
   const handleClick = event => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
-    searchMessage("main", searchValue, 1);
+    searchMessage(room, searchValue, 1);
   };
 
   const onInputChange = ev => {
@@ -277,7 +277,10 @@ const Search = ({ searchMessage, messages }) => {
   );
 };
 
-const mapStateToProps = state => ({ messages: state.messages.searchedResults });
+const mapStateToProps = state => ({
+  messages: state.messages.searchedResults,
+  room: state.room.item
+});
 
 export default connect(
   mapStateToProps,

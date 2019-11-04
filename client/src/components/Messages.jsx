@@ -3,7 +3,12 @@ import { Box, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
 import { connect } from "react-redux";
-import { getMessages, setMessage } from "../actions/messagesActions";
+import {
+  getMessages,
+  setMessage,
+  editMessage,
+  deleteMessage
+} from "../actions/messagesActions";
 import { setUsers } from "../actions/usersActions";
 import { setUserTyping } from "../actions/userTypingActions";
 
@@ -23,12 +28,14 @@ const useStyles = makeStyles({
 const Messages = ({
   socket,
   messages,
-  onDelete,
-  onEdit,
   setUsers,
   setMessage,
+  deleteMessage,
+  editMessage,
   getMessages,
-  setUserTyping
+  setUserTyping,
+  room,
+  name
 }) => {
   const classes = useStyles();
 
@@ -41,10 +48,23 @@ const Messages = ({
     //When we get messages from server
     socket.on("message", message => {
       console.log(message, "GOT THIS");
-      if (message.message.includes("has left")) {
-        setUserTyping(" is typing..");
+      switch (message.type) {
+        case "MESSAGE":
+          if (message.name !== name) setMessage(message);
+          break;
+        case "LEFT":
+          setUserTyping(" is typing..");
+          break;
+        case "DELETE":
+          deleteMessage(message.id, false);
+          break;
+        case "EDIT":
+          editMessage(0);
+          break;
+        default:
+          setMessage(message);
+          break;
       }
-      setMessage(message);
     });
     //We get the room data with users logged in
     socket.on("roomData", ({ users }) => {
@@ -72,8 +92,7 @@ const Messages = ({
                 name={message.name}
                 date={message.date}
                 id={message._id}
-                onDelete={onDelete}
-                onEdit={onEdit}
+                socket={socket}
               />
             </Box>
           );
@@ -83,9 +102,19 @@ const Messages = ({
   );
 };
 
-const mapStateToProps = state => ({ messages: state.messages.items });
+const mapStateToProps = state => ({
+  messages: state.messages.items,
+  room: state.room.item
+});
 
 export default connect(
   mapStateToProps,
-  { getMessages, setMessage, setUsers, setUserTyping }
+  {
+    getMessages,
+    setMessage,
+    setUsers,
+    editMessage,
+    deleteMessage,
+    setUserTyping
+  }
 )(Messages);

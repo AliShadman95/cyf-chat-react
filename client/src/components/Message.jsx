@@ -44,7 +44,16 @@ const calendarStrings = {
   sameElse: "L"
 };
 
-const Message = ({ message, name, date, avatar, editMessage, id }) => {
+const Message = ({
+  message,
+  name,
+  date,
+  avatar,
+  editMessage,
+  id,
+  room,
+  socket
+}) => {
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message);
@@ -70,6 +79,7 @@ const Message = ({ message, name, date, avatar, editMessage, id }) => {
     e.preventDefault();
     editMessage(id, editedMessage);
     setIsEditing(false);
+    socket.emit("DELETE_EDIT", room, () => {});
   };
 
   return (
@@ -145,7 +155,7 @@ const Message = ({ message, name, date, avatar, editMessage, id }) => {
 
         {name !== "Admin" && (
           <Box className={classes.menuRight}>
-            <EditMessage onEdit={onEdit} id={id} />
+            <EditMessage onEdit={onEdit} id={id} socket={socket} />
           </Box>
         )}
       </ListItem>
@@ -153,7 +163,9 @@ const Message = ({ message, name, date, avatar, editMessage, id }) => {
   );
 };
 
+const mapStateToProps = state => ({ room: state.room.item });
+
 export default connect(
-  null,
+  mapStateToProps,
   { editMessage }
 )(Message);

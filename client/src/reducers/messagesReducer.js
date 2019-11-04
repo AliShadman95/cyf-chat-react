@@ -26,6 +26,7 @@ export default (state = initialState, action) => {
       };
     case DELETE_MESSAGE:
       let newArray = [...state.items];
+      console.log(newArray.filter(e => e._id !== action.id));
       return { ...state, items: newArray.filter(e => e._id !== action.id) };
     case EDIT_MESSAGE:
       //Create copy of messages and edit the state

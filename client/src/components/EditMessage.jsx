@@ -49,7 +49,7 @@ const StyledMenuItem = withStyles(theme => ({
   }
 }))(MenuItem);
 
-const EditMessage = ({ deleteMessage, onEdit, id }) => {
+const EditMessage = ({ deleteMessage, onEdit, id, room, socket }) => {
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -62,7 +62,8 @@ const EditMessage = ({ deleteMessage, onEdit, id }) => {
   };
 
   const onDelete = id => {
-    deleteMessage(id);
+    deleteMessage(id, true);
+    socket.emit("DELETE", { room, id }, () => {});
   };
 
   return (
@@ -116,7 +117,9 @@ const EditMessage = ({ deleteMessage, onEdit, id }) => {
   );
 };
 
+const mapStateToProps = state => ({ room: state.room.item });
+
 export default connect(
-  null,
+  mapStateToProps,
   { deleteMessage }
 )(EditMessage);

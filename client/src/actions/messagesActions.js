@@ -30,7 +30,6 @@ export const postMessage = user => async dispatch => {
     user
   );
   dispatch({ type: POST_MESSAGE, payload: response.data });
-  // dispatch(getMessages(user.room));
 };
 
 export const emitMessage = message => async dispatch => {
@@ -43,12 +42,13 @@ export const setMessage = user => async dispatch => {
   dispatch({ type: POST_MESSAGE, payload: user });
 };
 
-export const deleteMessage = id => async dispatch => {
+export const deleteMessage = (id, currentUser) => async dispatch => {
   console.log("about to delete");
-  const response = await axios.delete(
-    `https://chat-by-as.herokuapp.com/messages/id/${id}`
-  );
-
+  if (currentUser) {
+    const response = await axios.delete(
+      `https://chat-by-as.herokuapp.com/messages/id/${id}`
+    );
+  }
   dispatch({ type: DELETE_MESSAGE, id: id });
 };
 
