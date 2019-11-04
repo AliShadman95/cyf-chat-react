@@ -25,7 +25,7 @@ const io = socketio(server, {
     res.end();
   }
 });
-io.origins('*:*');
+io.origins("*:*");
 
 const {
   addUser,
@@ -73,14 +73,14 @@ io.on("connection", socket => {
       name: "Admin",
       message: `${user.name}, Welcome!`,
       room: user.room,
-      type: "ADMIN"
+      type: "WELCOME"
     });
     //For all beside the sender client
     socket.broadcast.to(user.room).emit("message", {
       name: "Admin",
       message: `${user.name} has joined!`,
       room: user.room,
-      type: "ADMIN"
+      type: "JOIN"
     });
 
     io.to(user.room).emit("roomData", {
@@ -98,7 +98,8 @@ io.on("connection", socket => {
     io.to(user.room).emit("message", {
       avatar: user.avatar,
       name: user.name,
-      message
+      message,
+      type: "MESSAGE"
     });
 
     callback();
@@ -116,14 +117,14 @@ io.on("connection", socket => {
       name: "Admin",
       message: `${user.name} has joined!`,
       room: user.room,
-      type: "ADMIN"
+      type: "JOIN"
     });
 
     socket.broadcast.to(user.prevRoom).emit("message", {
       name: "Admin",
       message: `${user.name} has left.`,
       room: user.room,
-      type: "ADMIN"
+      type: "LEFT"
     });
 
     io.to(user.room).emit("roomData", {
