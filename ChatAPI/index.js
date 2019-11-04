@@ -18,13 +18,14 @@ const io = socketio(server, {
   handlePreflightRequest: (req, res) => {
     const headers = {
       "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Origin": "https://letschaaat.netlify.com",
+      "Access-Control-Allow-Origin": req.headers.origin,
       "Access-Control-Allow-Methods": "GET,UPDATE,OPTIONS,POST"
     };
     res.writeHead(200, headers);
     res.end();
   }
 });
+io.origins('*:*');
 
 const {
   addUser,
