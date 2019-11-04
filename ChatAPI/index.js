@@ -158,9 +158,10 @@ io.on("connection", socket => {
     callback();
   });
 
-  socket.on("DELETE", (room, callback) => {
+  socket.on("DELETE", ({ room, id }, callback) => {
     socket.broadcast.to(room).emit("message", {
-      type: "DELETE"
+      type: "DELETE",
+      id
     });
 
     callback();
