@@ -62,7 +62,7 @@ const EditMessage = ({ deleteMessage, onEdit, id, room, socket }) => {
   };
 
   const onDelete = id => {
-    deleteMessage(id, true);
+    deleteMessage(id);
     socket.emit("DELETE", { room, id }, () => {});
   };
 

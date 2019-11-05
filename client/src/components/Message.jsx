@@ -79,7 +79,7 @@ const Message = ({
     e.preventDefault();
     editMessage(id, editedMessage);
     setIsEditing(false);
-    socket.emit("DELETE_EDIT", room, () => {});
+    socket.emit("EDIT", { room, id }, () => {});
   };
 
   return (

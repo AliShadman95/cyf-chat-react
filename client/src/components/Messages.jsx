@@ -56,10 +56,11 @@ const Messages = ({
           setUserTyping(" is typing..");
           break;
         case "DELETE":
-          deleteMessage(message.id, false);
+          console.log("about to set the timeout");
+          setTimeout(() => getMessages(room), 2000);
           break;
         case "EDIT":
-          editMessage(0);
+          setTimeout(() => getMessages(room), 2000);
           break;
         default:
           setMessage(message);
