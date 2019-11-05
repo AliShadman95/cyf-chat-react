@@ -167,9 +167,10 @@ io.on("connection", socket => {
     callback();
   });
 
-  socket.on("EDIT", (room, callback) => {
+  socket.on("EDIT", ({ room, id }, callback) => {
     socket.broadcast.to(room).emit("message", {
-      type: "EDIT"
+      type: "EDIT",
+      id
     });
 
     callback();
