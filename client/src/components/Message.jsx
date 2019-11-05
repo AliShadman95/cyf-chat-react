@@ -19,6 +19,8 @@ import images from "../helpers/Images";
 import Moment from "react-moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Twemoji } from "react-emoji-render";
+import { connect } from "react-redux";
+import { editMessage } from "../actions/messagesActions";
 
 const useStyles = makeStyles(theme => ({
   whiteText: {
@@ -42,7 +44,16 @@ const calendarStrings = {
   sameElse: "L"
 };
 
-const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
+const Message = ({
+  message,
+  name,
+  date,
+  avatar,
+  editMessage,
+  id,
+  room,
+  socket
+}) => {
   const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message);
@@ -60,14 +71,15 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
     setEditedMessage(e.target.value);
   };
 
-  const editMessage = e => {
+  const onEdit = e => {
     setIsEditing(true);
   };
 
   const sendEditMessage = e => {
     e.preventDefault();
-    onEdit(id, editedMessage);
+    editMessage(id, editedMessage);
     setIsEditing(false);
+    socket.emit("EDIT", { room, id }, () => {});
   };
 
   return (
@@ -96,7 +108,8 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
                   variant="body2"
                   className={classes.whiteText}
                 >
-                  <Twemoji svg text={message} />
+                  {message}
+                  {/* <Twemoji svg text={message} /> */}
                 </Typography>
               )}
             </React.Fragment>
@@ -142,7 +155,7 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
 
         {name !== "Admin" && (
           <Box className={classes.menuRight}>
-            <EditMessage onDelete={onDelete} onEdit={editMessage} id={id} />
+            <EditMessage onEdit={onEdit} id={id} socket={socket} />
           </Box>
         )}
       </ListItem>
@@ -150,4 +163,9 @@ const Message = ({ message, name, date, avatar, onDelete, onEdit, id }) => {
   );
 };
 
-export default Message;
+const mapStateToProps = state => ({ room: state.room.item });
+
+export default connect(
+  mapStateToProps,
+  { editMessage }
+)(Message);

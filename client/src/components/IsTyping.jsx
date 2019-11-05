@@ -1,5 +1,6 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
 
 const IsTyping = ({ userTyping }) => {
   return (
@@ -9,4 +10,9 @@ const IsTyping = ({ userTyping }) => {
   );
 };
 
-export default IsTyping;
+const mapStateToProps = state => ({ userTyping: state.userTyping.item });
+
+export default connect(
+  mapStateToProps,
+  {}
+)(IsTyping);

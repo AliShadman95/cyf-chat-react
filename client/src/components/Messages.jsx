@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
+import { connect } from "react-redux";
+import {
+  getMessages,
+  setMessage,
+  editMessage,
+  deleteMessage
+} from "../actions/messagesActions";
+import { setUsers } from "../actions/usersActions";
+import { setUserTyping } from "../actions/userTypingActions";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -16,8 +25,59 @@ const useStyles = makeStyles({
   messageBox: { alignItems: "flex-end" }
 });
 
-const Messages = ({ messages, name, onDelete, onEdit, isEditing }) => {
+const Messages = ({
+  socket,
+  messages,
+  setUsers,
+  setMessage,
+  deleteMessage,
+  editMessage,
+  getMessages,
+  setUserTyping,
+  room,
+  name
+}) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    getMessages("main");
+  }, [getMessages]);
+
+  useEffect(() => {
+    console.log("called message effect");
+    //When we get messages from server
+    socket.on("message", message => {
+      console.log(message, "GOT THIS");
+      switch (message.type) {
+        case "MESSAGE":
+          if (message.name !== name) setMessage(message);
+          break;
+        case "LEFT":
+          setUserTyping(" is typing..");
+          break;
+        case "DELETE":
+          console.log("about to set the timeout");
+          setTimeout(() => getMessages(room), 2000);
+          break;
+        case "EDIT":
+          setTimeout(() => getMessages(room), 2000);
+          break;
+        default:
+          setMessage(message);
+          break;
+      }
+    });
+    //We get the room data with users logged in
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
+
+    return () => {
+      socket.emit("disconnect");
+      socket.off();
+    };
+  }, [messages]);
+
   return (
     <ScrollToBottom className={classes.root}>
       <List>
@@ -33,8 +93,7 @@ const Messages = ({ messages, name, onDelete, onEdit, isEditing }) => {
                 name={message.name}
                 date={message.date}
                 id={message._id}
-                onDelete={onDelete}
-                onEdit={onEdit}
+                socket={socket}
               />
             </Box>
           );
@@ -44,4 +103,19 @@ const Messages = ({ messages, name, onDelete, onEdit, isEditing }) => {
   );
 };
 
-export default Messages;
+const mapStateToProps = state => ({
+  messages: state.messages.items,
+  room: state.room.item
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    getMessages,
+    setMessage,
+    setUsers,
+    editMessage,
+    deleteMessage,
+    setUserTyping
+  }
+)(Messages);
