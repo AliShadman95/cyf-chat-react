@@ -55,6 +55,7 @@ io.on("connection", socket => {
   console.log("We have a new connection");
   console.log("Socked id at the start", socket.id);
   socket.on("join", ({ name, avatar, room }, callback) => {
+    console.log("recieved join socket from client");
     const { error, user } = addUser({
       id: previousUserId === "" ? socket.id : previousUserId,
       name,
