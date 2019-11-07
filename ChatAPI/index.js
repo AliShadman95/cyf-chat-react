@@ -178,6 +178,7 @@ io.on("connection", socket => {
 
   socket.on("disconnect", function() {
     const user = removeUser(socket.id);
+    console.log(,"user inside room",user);
 
     if (user) {
       io.to(user.room).emit("message", {
