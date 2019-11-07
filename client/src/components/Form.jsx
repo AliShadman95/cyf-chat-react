@@ -144,7 +144,7 @@ const Form = ({
         setInputValue("");
       });
     }
-    let mess = { name, avatar, message: inputValue, room: "main" };
+    let mess = { name, avatar, message: inputValue, room };
     postMessage(mess);
   };
 
