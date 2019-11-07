@@ -190,8 +190,8 @@ io.on("connection", socket => {
         room: user.room,
         users: getUsersInRoom(user.room)
       });
-      io.sockets.disconnect();
-      io.sockets.close();
+      io.socket.disconnect();
+      io.socket.close();
     }
   });
 });
