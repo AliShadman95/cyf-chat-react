@@ -176,7 +176,7 @@ io.on("connection", socket => {
     callback();
   });
 
-  socket.on("disconnect", function() {
+  socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     console.log("user inside room", user);
 
