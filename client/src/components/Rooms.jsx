@@ -18,14 +18,14 @@ const usePrevious = value => {
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: "#404346",
+    backgroundColor: "#1F2833",
     boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)",
     color: "white",
     overflow: "auto",
     height: "100%"
   },
   room: {
-    backgroundColor: "#404346"
+    backgroundColor: "#1F2833"
   },
   messageBox: { alignItems: "flex-end" }
 });

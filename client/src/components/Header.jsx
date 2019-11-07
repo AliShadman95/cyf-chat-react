@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  Typography,
-  Radio,
-  AppBar,
-  Toolbar,
-  Menu,
-  MenuItem
-} from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { Typography, AppBar, Toolbar } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Search from "./Search";
-import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,9 +22,14 @@ const Header = ({ searchMessages, searchMessagesResult }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ backgroundColor: "#404346" }}>
+      <AppBar position="static" style={{ backgroundColor: "#1F2833" }}>
         <Toolbar variant="dense">
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            className={classes.title}
+            style={{ color: "#66FCF1", fontWeight: "bold" }}
+            variant="h4"
+            noWrap
+          >
             Let's Chat!
           </Typography>
           <Search />

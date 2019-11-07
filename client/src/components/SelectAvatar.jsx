@@ -16,15 +16,9 @@ import {
 
 const useStyles = makeStyles(theme => ({
   expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    })
+    marginLeft: "auto"
   },
-  expandOpen: {
-    transform: "rotate(180deg)"
-  },
+
   avatarSelected: {
     backgroundColor: "rgba(0, 0, 0, 0.08) !important"
   }
@@ -119,7 +113,7 @@ const SelectAvatar = ({ onAvtClick }) => {
         aria-expanded={expanded}
         aria-label="show more"
       >
-        <ExpandMoreIcon />
+        <Avatar src={images[selectedAvatar]} />
       </IconButton>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Flickity>{CarouselBehaviour()}</Flickity>

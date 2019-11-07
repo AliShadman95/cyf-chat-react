@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
       let copyArr = [...state.items];
       let copyAction = [...action.payload];
       if (copyArr[0]) {
-        if (copyArr[0].length < 1) {
+        if (copyArr[0].name === "Admin") {
           copyAction.push(copyArr[0]);
         }
       }

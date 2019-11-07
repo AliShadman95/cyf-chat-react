@@ -12,20 +12,20 @@ import SelectAvatar from "./SelectAvatar";
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
-      color: "black"
+      color: "#C5C6C7"
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: "#B0B2B5"
+      borderBottomColor: "#C5C6C7"
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "red"
+        borderColor: "#C5C6C7"
       },
       "&:hover fieldset": {
-        borderColor: "#76787D"
+        borderBottomColor: "#C5C6C7"
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#76787D"
+        borderColor: "#C5C6C7"
       }
     }
   }
@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
   margin: {
     margin: theme.spacing(1)
+  },
+  floatingLabelFocusStyle: {
+    color: "white"
   }
 }));
 
@@ -45,7 +48,7 @@ const Join = () => {
   const classes = useStyles();
 
   const defaultProps = {
-    borderColor: "#B0B2B5",
+    borderColor: "#45A29E",
     m: 5,
     border: 3
   };
@@ -60,15 +63,26 @@ const Join = () => {
       <Box
         borderRadius={16}
         {...defaultProps}
-        style={{ backgroundColor: "#76787D" }}
+        style={{ backgroundColor: "#1F2833" }}
       >
         <Box className="text-center">
-          <Typography variant="h1">Join</Typography>
+          <Typography
+            variant="h2"
+            style={{ color: "#66FCF1", fontWeight: "bold" }}
+          >
+            Join
+          </Typography>
         </Box>
 
         <Divider variant="middle" />
         <Box className="text-center">
           <CssTextField
+            InputLabelProps={{
+              style: { color: "#C5C6C7" }
+            }}
+            InputProps={{
+              style: { color: "#C5C6C7" }
+            }}
             className={classes.margin}
             id="custom-css-standard-input"
             label="Username"
@@ -90,7 +104,12 @@ const Join = () => {
             onClick={e => (!username ? e.preventDefault() : null)}
             to={`/chat?name=${username}&avatar=${avatar}`}
           >
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#45A29E"
+              }}
+            >
               Go
             </Button>
           </Link>
