@@ -3,12 +3,7 @@ import { Box, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Message from "./Message";
 import { connect } from "react-redux";
-import {
-  getMessages,
-  setMessage,
-  editMessage,
-  deleteMessage
-} from "../actions/messagesActions";
+import { getMessages, setMessage } from "../actions/messagesActions";
 import { setUsers } from "../actions/usersActions";
 import { setUserTyping } from "../actions/userTypingActions";
 

@@ -67,7 +67,7 @@ const Join = () => {
       >
         <Box className="text-center">
           <Typography
-            variant="h1"
+            variant="h2"
             style={{ color: "#66FCF1", fontWeight: "bold" }}
           >
             Join

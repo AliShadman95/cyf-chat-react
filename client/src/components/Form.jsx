@@ -12,7 +12,13 @@ import { setUserTyping } from "../actions/userTypingActions";
 
 const CssTextField = withStyles({
   root: {
-    borderBottomColor: "white",
+    "& .MuiInputBase-root": {
+      color: "#B0B2B5"
+    },
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      borderBottomColor: "#B0B2B5"
+    },
+
     "& label.Mui-focused": {
       color: "#B0B2B5"
     },
