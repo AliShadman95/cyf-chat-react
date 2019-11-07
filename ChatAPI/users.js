@@ -37,9 +37,10 @@ const updateUserRoom = (id, room) => {
 };
 
 const removeUser = id => {
+  console.log(users);
   const index = users.findIndex(user => user.id === id);
   console.log("removed user");
-  users.splice(index, 1)[0];
+
   if (index !== -1) {
     return users.splice(index, 1)[0];
   }
