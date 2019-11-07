@@ -2,13 +2,22 @@ import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Typography,
+  Collapse,
+  Grid
+} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { connect } from "react-redux";
 import { postMessage, getMessages } from "../actions/messagesActions";
 import { setUserTyping } from "../actions/userTypingActions";
+import Picker from "emoji-picker-react";
+import clsx from "clsx";
 
 const CssTextField = withStyles({
   root: {
@@ -53,7 +62,8 @@ const useStyles = makeStyles(theme => ({
   button: {
     boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)",
     backgroundColor: "#45A29E"
-  }
+  },
+  expand: { marginLeft: "auto" }
 }));
 const Form = ({
   postMessage,
@@ -69,6 +79,8 @@ const Form = ({
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     socket.on("IS_TYPING", ({ name }) => {
@@ -95,6 +107,14 @@ const Form = ({
     socket.emit("SEND_IS_NOT_TYPING", { room, name }, error => {
       console.log(error);
     });
+  };
+
+  const onEmojiClick = (event, emojiObject) => {
+    setChosenEmoji(emojiObject);
+  };
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   const onInputChange = ev => {
@@ -141,6 +161,29 @@ const Form = ({
           onKeyPress={ev => (ev.key === "Enter" ? sendMessage(ev) : null)}
         />
       </Grid>
+      {/* <Grid
+        item
+        md={2}
+        xl={2}
+        xs={3}
+        className={classes.alignselfcenter + " pl-2"}
+      >
+        <Box>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <Avatar />
+          </IconButton>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Picker onEmojiClick={onEmojiClick} />
+          </Collapse>
+        </Box>
+      </Grid> */}
       <Grid
         item
         md={2}
