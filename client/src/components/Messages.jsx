@@ -57,7 +57,7 @@ const Messages = ({
       console.log(message, "GOT THIS");
       switch (message.type) {
         case "MESSAGE":
-          if (message.name !== name) setMessage(message);
+          if (message.name !== name.toLowerCase()) setMessage(message);
           break;
         case "LEFT":
           setUserTyping(" is typing..");
