@@ -180,7 +180,7 @@ io.on("connection", socket => {
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     console.log("user inside room", user);
-
+    socket.leave(user.prevRoom ? user.prevRoom : user.room);
     if (user) {
       io.to(user.room).emit("message", {
         name: "Admin",
