@@ -191,9 +191,7 @@ io.on("connection", socket => {
         room: user.room,
         users: getUsersInRoom(user.room)
       });
-      io.socket.disconnect();
-      io.socket.close();
-      console.log("disconnected and closed");
+     
     }
   });
 });
