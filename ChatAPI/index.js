@@ -192,6 +192,7 @@ io.on("connection", socket => {
       });
       io.socket.disconnect();
       io.socket.close();
+      console.log("disconnected and closed");
     }
   });
 });
