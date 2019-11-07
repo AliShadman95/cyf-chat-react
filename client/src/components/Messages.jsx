@@ -15,14 +15,28 @@ import { setUserTyping } from "../actions/userTypingActions";
 import ScrollToBottom from "react-scroll-to-bottom";
 
 const useStyles = makeStyles({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "#B0B2B5",
+      outline: "1px solid slategrey",
+      borderRadius: "100px"
+    }
+  },
   root: {
-    backgroundColor: "#404346",
+    backgroundColor: "#1F2833",
     boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)",
     color: "white",
     overflow: "auto",
     height: "100%"
   },
-  messageBox: { alignItems: "flex-end" }
+  messageBox: { alignItems: "flex-end" },
+  scrollBtn: { backgroundColor: "#B0B2B5" }
 });
 
 const Messages = ({
@@ -30,8 +44,6 @@ const Messages = ({
   messages,
   setUsers,
   setMessage,
-  deleteMessage,
-  editMessage,
   getMessages,
   setUserTyping,
   room,
@@ -79,7 +91,10 @@ const Messages = ({
   }, [messages]);
 
   return (
-    <ScrollToBottom className={classes.root}>
+    <ScrollToBottom
+      className={classes.root}
+      followButtonClassName={classes.scrollBtn}
+    >
       <List>
         {messages.map((message, i) => {
           return (
@@ -114,8 +129,6 @@ export default connect(
     getMessages,
     setMessage,
     setUsers,
-    editMessage,
-    deleteMessage,
     setUserTyping
   }
 )(Messages);

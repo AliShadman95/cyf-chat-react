@@ -12,21 +12,26 @@ import { setUserTyping } from "../actions/userTypingActions";
 
 const CssTextField = withStyles({
   root: {
+    borderBottomColor: "white",
     "& label.Mui-focused": {
-      color: "black"
+      color: "#B0B2B5"
+    },
+    "& .MuiInput-underline:before": {
+      borderBottomColor: "#B0B2B5"
     },
     "& .MuiInput-underline:after": {
       borderBottomColor: "#B0B2B5"
     },
+
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "red"
+        borderBottomColor: "white"
       },
       "&:hover fieldset": {
-        borderColor: "#76787D"
+        borderBottomColor: "#B0B2B5"
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#76787D"
+        borderBottomColor: "#B0B2B5"
       }
     }
   }
@@ -39,7 +44,10 @@ const useStyles = makeStyles(theme => ({
   },
   margin: {},
   alignselfcenter: { alignSelf: "center" },
-  button: { boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }
+  button: {
+    boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)",
+    backgroundColor: "#45A29E"
+  }
 }));
 const Form = ({
   postMessage,
@@ -136,9 +144,12 @@ const Form = ({
       >
         <Button
           variant="contained"
-          color="primary"
           className={classes.button}
-          endIcon={<Icon>send</Icon>}
+          endIcon={
+            <Icon>
+              <span style={{ color: "#B0B2B5" }}>send</span>
+            </Icon>
+          }
           size={matches ? "small" : "large"}
           onClick={ev => {
             sendMessage(ev);

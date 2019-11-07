@@ -12,7 +12,10 @@ const FetchChips = ({ room, getMessages, getLatestMessages }) => {
   return (
     <React.Fragment>
       <Chip
-        style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
+        style={{
+          backgroundColor: "#1F2833",
+          boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)"
+        }}
         avatar={<Icon path={mdiReload} title="reload" size={1} color="white" />}
         label={
           <Typography
@@ -30,7 +33,10 @@ const FetchChips = ({ room, getMessages, getLatestMessages }) => {
         variant="outlined"
       />
       <Chip
-        style={{ boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)" }}
+        style={{
+          backgroundColor: "#1F2833",
+          boxShadow: "0px 6px 16px -4px rgba(0,0,0,0.56)"
+        }}
         avatar={<Icon path={mdiReload} title="reload" size={1} color="white" />}
         label={
           <Typography
