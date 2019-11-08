@@ -8,3 +8,4 @@ export const ADD_USER = "ADD_USER";
 export const SET_USERS = "SET_USERS";
 export const SET_ROOM = "SET_ROOM";
 export const SET_USER_TYPING = "SET_USER_TYPING";
+export const REMOVE_USER = "REMOVE_USER";
