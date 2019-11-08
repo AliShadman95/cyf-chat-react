@@ -42,6 +42,7 @@ const removeUser = id => {
   console.log("removed user");
 
   if (index !== -1) {
+    users.splice(index, 1);
     return users.splice(index, 1)[0];
   }
 };
