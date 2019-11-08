@@ -42,8 +42,9 @@ const removeUser = id => {
   console.log("removed user");
 
   if (index !== -1) {
+    let copyUsers = [...users];
     users.splice(index, 1);
-    return users.splice(index, 1)[0];
+    return copyUsers.splice(index, 1)[0];
   }
 };
 
