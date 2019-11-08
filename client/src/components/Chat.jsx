@@ -12,9 +12,11 @@ import Box from "@material-ui/core/Box";
 import FetchChips from "./FetchChips";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { removeUser } from "../actions/usersActions";
+import { connect } from "react-redux";
 
 const ENDPOINT = "https://chat-by-as.herokuapp.com/";
-const socket = io(ENDPOINT);
+const socket = io(ENDPOINT, { autoConnect: false });
 
 const useStyles = makeStyles(theme => ({
   chipsXS: {
@@ -58,25 +60,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Chat = ({ location }) => {
+const Chat = ({ location, removeUser, room }) => {
   const classes = useStyles();
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState(0);
 
   useEffect(() => {
+    socket.open();
+
     const { name, avatar } = queryString.parse(location.search);
     setName(name);
     setAvatar(avatar);
-    console.log("calling join emit");
+    console.log("about to emit join");
     //Emmiting Join
-    socket.emit("join", { name, avatar, room: "main" }, error => {
+    socket.emit("join", { name, avatar, room }, error => {
       console.log("inside join emit, added user");
       console.log(error);
     });
 
     return () => {
+      console.log("unmounted");
+      console.log(socket.id);
+      removeUser(socket.id);
       socket.emit("disconnect");
       socket.off();
+      socket.close();
     };
   }, [ENDPOINT, location.search]);
 
@@ -131,4 +139,11 @@ const Chat = ({ location }) => {
   );
 };
 
-export default Chat;
+const mapStateToProps = state => ({
+  room: state.room.item
+});
+
+export default connect(
+  mapStateToProps,
+  { removeUser }
+)(Chat);
